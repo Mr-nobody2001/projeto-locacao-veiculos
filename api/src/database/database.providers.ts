@@ -1,4 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
+import {Cliente} from "../cliente/entities/cliente.entity";
+
 
 export const databaseProviders = [
     {
@@ -12,8 +14,8 @@ export const databaseProviders = [
                 password: '123',
                 database: 'projeto_locacao_veiculos',
             });
-            sequelize.addModels([]);
-            await sequelize.sync();
+            sequelize.addModels([Cliente]);
+            await sequelize.sync(/*{ force: true }*/);
             return sequelize;
         },
     },
