@@ -11,7 +11,7 @@ export const databaseProviders = [
                 host: 'localhost',
                 port: 5432,
                 username: 'postgres',
-                password: '123',
+                password: '123456',
                 database: 'projeto_locacao_veiculos',
             });
             sequelize.addModels([Cliente]);
