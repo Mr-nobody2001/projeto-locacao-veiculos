@@ -1,0 +1,15 @@
+@import "@mdi/font/css/materialdesignicons.css";
+
+$background: #EEF0F9;
+$primary: #5D67D6;
+
+body {
+    background: $background;
+}
+
+.v-container {
+    &.v-container--fluid {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
