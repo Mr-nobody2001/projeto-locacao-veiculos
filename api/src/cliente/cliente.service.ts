@@ -1,4 +1,4 @@
-import {Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {BadRequestException, Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateClienteDto} from './dto/create-cliente.dto';
 import {UpdateClienteDto} from './dto/update-cliente.dto';
 import {Cliente} from "./entities/cliente.entity";
@@ -12,9 +12,22 @@ export class ClienteService {
     }
 
     async create(createClienteDto: CreateClienteDto) {
-        await this.clienteRepository.create({
+        createClienteDto.cpf = createClienteDto.cpf.replace(/\D/g, "");
+        createClienteDto.telefone = createClienteDto.telefone.replace(/\D/g, "");
+
+        const emailExiste = await this.emailExits(createClienteDto.email);
+        if(emailExiste) {
+            throw new BadRequestException("Esse email já está sendo usado");
+        }
+
+        const cpfExiste = await this.cpfExits(createClienteDto.cpf);
+        if(cpfExiste) {
+            throw new BadRequestException("Esse cpf já está sendo usado");
+        }
+
+        return await this.clienteRepository.create({
             nome: createClienteDto.nome,
-            data_nascimento: new Date(createClienteDto.data_nascimento),
+            data_nascimento: createClienteDto.data_nascimento,
             cpf: createClienteDto.cpf,
             telefone: createClienteDto.telefone,
             email: createClienteDto.email,
@@ -59,5 +72,23 @@ export class ClienteService {
         const cliente = await this.findOne(id);
 
         await cliente.destroy();
+    }
+
+    async emailExits(email: string) {
+        const count = await this.clienteRepository.count({
+            where: {
+                email,
+            },
+        });
+        return count > 0;
+    }
+
+    async cpfExits(cpf: string) {
+        const count = await this.clienteRepository.count({
+            where: {
+                cpf,
+            },
+        });
+        return count > 0;
     }
 }
