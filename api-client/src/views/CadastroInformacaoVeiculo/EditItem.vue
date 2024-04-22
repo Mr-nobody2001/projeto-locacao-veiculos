@@ -1,48 +1,86 @@
 <template>
   <v-container>
-    <v-card>
-      <v-row>
-        <v-col cols="12">
-          <v-select
-              label="Selecione a marca do carro"
-              :items="marcasVeiculo"
-              item-title="nome"
-              item-value="codigo"
-              :loading="loadingMarca"
-              v-model="marcaSelecionada"
-              variant="outlined"
-          ></v-select>
-        </v-col>
+    <v-row>
+      <v-col cols="6">
+        <v-img
+            height="200px"
+            width="300px"
+            :src="imagemUrl"
+            alt="Imagem Enviada"
+            cover
+        />
+      </v-col>
 
-        <v-col cols="12">
-          <v-select
-              label="Escolha o modelo do carro"
-              :items="modelosVeiculo"
-              item-title="nome"
-              item-value="codigo"
-              :loading="loadingModelo"
-              :disabled="!marcaSelecionada"
-              v-model="modeloSelecionado"
-              variant="outlined"
-          ></v-select>
-        </v-col>
+      <v-col cols="6" class="d-flex justify-end">
+        <v-btn
+            color="primary"
+            density="comfortable"
+        >
+          Cadastrar
+        </v-btn>
+      </v-col>
 
-        <v-col cols="12">
-          <v-select
-              label="Selecione o ano de lançamento do carro."
-              :items="anosDeLancamento"
-              item-title="nome"
-              item-value="codigo"
-              :loading="loadingAnoDeLancamento"
-              :disabled="!modeloSelecionado"
-              v-model="anoDeLancamentoSelecionado"
-              variant="outlined"
-          ></v-select>
-        </v-col>
-        <v-checkbox :input-value="boolValue" class="mx-2" label="Checkbox"></v-checkbox>
+      <v-col cols="12">
+        <v-combobox
+            class="mb-10"
+            label="Selecione a marca do carro"
+            :items="marcasVeiculo"
+            item-title="nome"
+            item-value="codigo"
+            :loading="loadingMarca"
+            v-model="marcaSelecionada"
+            variant="outlined"
+            @update:modelValue="getModelosVeiculo"
+        />
 
-      </v-row>
-    </v-card>
+        <v-combobox
+            class="mb-10"
+            label="Escolha o modelo do carro"
+            :items="modelosVeiculo"
+            item-title="nome"
+            item-value="codigo"
+            :loading="loadingModelo"
+            :disabled="!marcaSelecionada"
+            v-model="modeloSelecionado"
+            variant="outlined"
+            @update:modelValue="getDataDeLancamentoVeiculo"
+        />
+
+        <v-select
+            class="mb-10"
+            label="Selecione o ano de lançamento do carro."
+            :items="anosDeLancamento"
+            item-title="nome"
+            item-value="codigo"
+            :loading="loadingAnoDeLancamento"
+            :disabled="!modeloSelecionado"
+            v-model="anoDeLancamentoSelecionado"
+            variant="outlined"
+        />
+
+        <v-combobox
+            class="mb-10"
+            v-model="caracteristicasSelecionadas"
+            :items="caracteristicasVeiculo"
+            :disabled="!anoDeLancamentoSelecionado"
+            label="Selecione as características do veículo"
+            multiple
+            chips
+            deletable-chips
+            small-chips
+            variant="outlined"
+        />
+
+        <v-file-input
+            v-model="imagemVeiculo"
+            accept="image/*"
+            label="Selecione uma imagem"
+            placeholder="Nenhuma imagem selecionada"
+            prepend-icon="mdi-camera-burst"
+            show-size
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -53,6 +91,7 @@ export default {
   data: () => ({
     loadingMarca: false,
     loadingModelo: false,
+    imagemVeiculo: null,
     loadingAnoDeLancamento: false,
     marcasVeiculo: [],
     marcaSelecionada: null,
@@ -60,8 +99,39 @@ export default {
     modeloSelecionado: null,
     anosDeLancamento: [],
     anoDeLancamentoSelecionado: null,
-    boolValue: true,
+    caracteristicasVeiculo: [
+      "Ar-condicionado",
+      "Vidro elétrico",
+      "Trava elétrica",
+      "Air bag",
+      "Automático",
+      "ABS",
+      "Direção assistida",
+      "Câmbio manual",
+      "Câmbio automático",
+      "Controle de tração",
+      "Controle de estabilidade",
+      "Sensor de estacionamento",
+      "Câmera de ré",
+      "Rádio FM/AM",
+      "Bluetooth",
+      "Entrada USB",
+      "Freios a disco nas 4 rodas",
+      "Faróis de neblina",
+      "Rodas de liga leve",
+    ],
+    caracteristicasSelecionadas: [],
   }),
+
+  computed: {
+    imagemUrl() {
+      if (!this.imagemVeiculo) {
+        return require('@/assets/placeholder-veiculo.png');
+      }
+
+      return URL.createObjectURL(this.imagemVeiculo);
+    }
+  },
 
   methods: {
     getMarcasVeiculo() {
@@ -75,10 +145,15 @@ export default {
     },
 
     getModelosVeiculo(marcaVeiculo) {
+      if (Object.prototype.toString.call(marcaVeiculo) !== '[object Object]') return;
+
       this.loadingModelo = true;
 
+      this.modeloSelecionado = null;
+      this.anoDeLancamentoSelecionado = null;
+
       FipeService
-          .getModelosVeiculo(marcaVeiculo)
+          .getModelosVeiculo(marcaVeiculo.codigo)
           .then(response => {
             this.modelosVeiculo = response.data.modelos;
           })
@@ -87,10 +162,14 @@ export default {
     },
 
     getDataDeLancamentoVeiculo(modeloVeiculo) {
+      if (Object.prototype.toString.call(modeloVeiculo) !== '[object Object]') return;
+
       this.loadingAnoDeLancamento = true;
 
+      this.anoDeLancamentoSelecionado = null;
+
       FipeService
-          .getDataDeLancamentoVeiculo(this.marcaSelecionada, modeloVeiculo)
+          .getDataDeLancamentoVeiculo(this.marcaSelecionada.codigo, modeloVeiculo.codigo)
           .then(response => {
             this.anosDeLancamento = response.data;
           })
@@ -102,21 +181,6 @@ export default {
   mounted() {
     this.getMarcasVeiculo();
   },
-
-  watch: {
-    marcaSelecionada(marcaSelecionada) {
-      this.modeloSelecionado = null;
-      this.anoDeLancamentoSelecionado = null;
-
-      if (marcaSelecionada) this.getModelosVeiculo(marcaSelecionada);
-    },
-
-    modeloSelecionado(modeloSelecionado) {
-      this.anoDeLancamentoSelecionado = null;
-
-      if (modeloSelecionado) this.getDataDeLancamentoVeiculo(modeloSelecionado);
-    }
-  }
 }
 </script>
 
