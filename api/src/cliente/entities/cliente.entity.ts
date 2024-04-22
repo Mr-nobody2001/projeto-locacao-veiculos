@@ -1,3 +1,4 @@
+import { DataTypes } from "sequelize";
 import {Column, Table, Model} from "sequelize-typescript";
 
 @Table
@@ -5,16 +6,16 @@ export class Cliente extends Model {
     @Column({allowNull: false})
     nome: string;
 
-    @Column({allowNull: false})
+    @Column({type: DataTypes.DATEONLY, allowNull: false})
     data_nascimento: Date;
 
-    @Column({allowNull: false})
+    @Column({allowNull: false, unique: true})
     cpf: string;
 
     @Column({allowNull: false})
     telefone: string;
 
-    @Column({allowNull: false})
+    @Column({allowNull: false, unique: true})
     email: string;
 
     @Column({allowNull: false})
