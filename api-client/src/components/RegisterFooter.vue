@@ -1,5 +1,5 @@
 <template>
-    <v-footer class="bg-indigo-lighten-1 d-flex align-start flex-column py-5">
+    <v-footer class="bg-indigo-lighten-1 d-flex align-start flex-column py-5" style="max-height: 200px">
         <strong class="ms-7 mb-2 text-uppercase">Contato:</strong>
         <div>
             <v-btn class="mx-4" variant="text" size="small">

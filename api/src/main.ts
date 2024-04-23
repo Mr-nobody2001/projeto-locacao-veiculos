@@ -11,6 +11,9 @@ async function bootstrap() {
         transform: true, // Transforma os dados recebidos em instâncias da DTO
       }),
   );
+  app.enableCors({
+      origin: 'http://localhost:8080',
+  });
   await app.listen(3000);
 }
 bootstrap();

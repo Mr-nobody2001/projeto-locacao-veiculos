@@ -1,16 +1,11 @@
 import cadastroInformacoesVeiculo from "@/router/cadastro-informacoes-veiculo";
+import root from "@/router/root";
 
 let routes = []
 routes = routes.concat(
+    root,
     cadastroInformacoesVeiculo,
 );
-
-// routes.push({
-//     path: '/',
-//     redirect: {
-//         name: 'Login'
-//     }
-// });
 
 // routes.push({
 //     path: '*',

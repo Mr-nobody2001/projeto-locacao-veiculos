@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="flex-column" full-height>
+    <v-layout class="flex-column justify-space-between" full-height>
         <div class="layout-content">
             <router-view />
         </div>
@@ -9,7 +9,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import RegisterFooter from "./RegisterFooter.vue";
+import RegisterFooter from "../components/RegisterFooter.vue";
 
 export default defineComponent({
     name: "AppLayout",

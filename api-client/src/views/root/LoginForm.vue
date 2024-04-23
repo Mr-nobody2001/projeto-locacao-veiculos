@@ -1,13 +1,8 @@
 <template>
-    <v-container fluid>
+    <v-container class="mt-6 mx-5" fluid>
         <header>
             <div class="header-content d-flex align-center">
-                <v-btn variant="text" class="btn-back" color="primary">
-                    <v-icon icon="mdi-chevron-left" start></v-icon>
-                    Voltar
-                </v-btn>
-
-                <router-link to="/cadastro" class="ms-auto">
+                <router-link to="/cadastro-usuario" class="ms-auto">
                     <v-btn variant="text" class="btn-back" color="primary">
                         Cadastre-se
                         <v-icon icon="mdi-chevron-right" start></v-icon>
@@ -15,10 +10,10 @@
                 </router-link>
             </div>
         </header>
-        <v-card class="mx-auto" max-width="500px">
+        <v-card class="mx-auto my-10 cardColor" max-width="500px" variant="outlined">
             <v-card-item>
                 <div class="d-flex justify-center">
-                    <img src="@/assets/img/logo.jpg" alt="Logo" width="140">
+                    <img src="../../assets/img/logo.jpg" alt="Logo" width="140">
                 </div>
             </v-card-item>
 
@@ -27,19 +22,17 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field v-model="email" :rules="emailRule" label="Username" required>
-                                </v-text-field>
+                                <v-text-field v-model="email" :rules="emailRule" label="Username" required variant="outlined"/>
                             </v-col>
 
                             <v-col cols="12">
-                                <v-text-field type="password" v-model="senha" :rules="senhaRule" label="Password"
-                                    required>
-                                </v-text-field>
+                                <v-text-field type="password" v-model="senha" :rules="senhaRule" label="Password" required variant="outlined"/>
 
-                                <div class="d-flex justify-center justify-sm-end mt-3 mt-sm-n5">
-                                    <v-btn class="text-none" size="small" variant="text" color="primary">Esqueceu a
-                                        senha?</v-btn>
-                                </div>
+                              <router-link to="/recuperar-senha" class="ms-auto">
+                                  <div class="d-flex justify-center justify-sm-end mt-5 mt-sm-n5">
+                                      <v-btn class="text-none" size="small" variant="text" color="primary">Esqueceu a senha?</v-btn>
+                                  </div>
+                              </router-link>
                             </v-col>
 
                             <v-col class="d-flex justify-center mt-2" cols="12">
@@ -85,3 +78,10 @@ export default defineComponent({
     },
 });
 </script>
+
+<style scoped>
+.cardColor {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: white !important;
+}
+</style>

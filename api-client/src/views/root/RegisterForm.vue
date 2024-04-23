@@ -2,16 +2,16 @@
     <v-container fluid>
         <header>
             <div class="header-content d-flex align-center">
-                <v-btn variant="text" class="btn-back" color="primary">
+                <v-btn variant="text" class="btn-back" color="primary" @click="voltar">
                     <v-icon icon="mdi-chevron-left" start></v-icon>
                     Voltar
                 </v-btn>
             </div>
         </header>
-        <v-card class="mx-auto" max-width="80vw">
+        <v-card class="mx-auto cardColor" max-width="80vw" variant="outlined">
             <v-card-item>
                 <div class="d-flex justify-center">
-                    <img src="@/assets/img/logo.jpg" alt="Logo" width="140">
+                    <img src="../../assets/img/logo.jpg" alt="Logo" width="140">
                 </div>
             </v-card-item>
 
@@ -25,6 +25,7 @@
                                     :rules="nomeCompletoRule"
                                     label="Nome Completo"
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -35,6 +36,7 @@
                                     label="CPF"
                                     v-mask="'###.###.###-##'"
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -47,6 +49,7 @@
                                     :max="new Date().toISOString().slice(0, 10)"
                                     label="Data de Nascimento"
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -58,6 +61,7 @@
                                     label="Telefone"
                                     v-mask="'(##) #####-####'"
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -67,6 +71,7 @@
                                     :rules="emailRule"
                                     label="E-mail" 
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -76,6 +81,7 @@
                                     :rules="enderecoRule"
                                     label="Endereço" 
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -86,6 +92,7 @@
                                     :rules="senhaRule"
                                     label="Senha" 
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
@@ -96,11 +103,12 @@
                                     :rules="confSenhaRule"
                                     label="Confirmação de Senha"
                                     required
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
 
                             <v-col class="d-flex justify-center mt-5" cols="12">
-                                <v-btn type="submit" color="primary" @click="enviar()">
+                                <v-btn type="submit" color="primary" :loading="loading" @click="cadastrarCliente()">
                                     Cadastrar
                                 </v-btn>
                             </v-col>
@@ -116,11 +124,14 @@
 import { validarCPF, validarDataNascimento, validarEmail, validarTelefone } from "@/helpers";
 import { defineComponent } from "vue";
 import {mask} from 'vue-the-mask';
+import UsuarioService from "../../../service/UsuarioService";
+import {erro} from "@/toast/toast";
 
 export default defineComponent({
     name: "RegisterForm",
     data() {
         return {
+            loading: false,
             nomeCompleto: "",
             cpf: "",
             dataDeNasc:"",
@@ -218,9 +229,32 @@ export default defineComponent({
         }
     },
     methods: {
-        enviar() {
-            console.log("Enviou")
-        }
+      cadastrarCliente() {
+        this.loading = true;
+
+        const data = {
+          nome: this.nomeCompleto,
+          data_nascimento: this.dataDeNasc,
+          cpf: this.cpf,
+          telefone: this.telefone,
+          email: this.email,
+          senha: this.senha,
+          endereco: this.endereco,
+        };
+
+        UsuarioService
+            .cadastrarCliente(data)
+            .then(() => this.$router.push({ name: 'LoginForm' }))
+            .catch((err) => {
+              console.error('Erro: ', err);
+              erro('Ocorreu um erro durante o cadastro do cliente.')
+            })
+            .finally(() => this.loading = false)
+      },
+
+      voltar() {
+        this.$router.go(-1);
+      }
     },
     directives: {
         mask
@@ -234,6 +268,11 @@ export default defineComponent({
 }
 
 .btn {
-    background-color: ¨#5D67D6;
+    background-color: #5D67D6;
+}
+
+.cardColor {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: white !important;
 }
 </style>
