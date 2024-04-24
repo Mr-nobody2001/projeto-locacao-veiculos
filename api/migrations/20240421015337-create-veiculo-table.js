@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('veiculos', {
+    await queryInterface.createTable('Veiculos', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -49,36 +49,36 @@ module.exports = {
       }
     });
 
-    await queryInterface.addConstraint('veiculos', {
+    await queryInterface.addConstraint('Veiculos', {
       fields: ['informacoesVeiculoId'],
       type: 'foreign key',
       name: 'FK_veiculos_informacoes_veiculo',
       references: {
-        table: 'informacoes-veiculo',
+        table: 'InformacoesVeiculo',
         field: 'id'
       },
       onUpdate: 'RESTRICT',
       onDelete: 'RESTRICT'
     });
 
-    await queryInterface.addConstraint('veiculos', {
+    await queryInterface.addConstraint('Veiculos', {
       fields: ['corId'],
       type: 'foreign key',
       name: 'FK_veiculos_cores',
       references: {
-        table: 'cores',
+        table: 'Cores',
         field: 'id'
       },
       onUpdate: 'RESTRICT',
       onDelete: 'RESTRICT'
     });
 
-    await queryInterface.addConstraint('veiculos', {
+    await queryInterface.addConstraint('Veiculos', {
       fields: ['categoriaId'],
       type: 'foreign key',
       name: 'FK_veiculos_categoria',
       references: {
-        table: 'categorias',
+        table: 'Categorias',
         field: 'id'
       },
       onUpdate: 'RESTRICT',
@@ -87,9 +87,9 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeConstraint('veiculos', 'FK_veiculos_informacoes_veiculo');
-    await queryInterface.removeConstraint('veiculos', 'FK_veiculos_cores');
-    await queryInterface.removeConstraint('veiculos', 'FK_veiculos_categoria');
-    await queryInterface.dropTable('veiculos');
+    await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_informacoes_veiculo');
+    await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_cores');
+    await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_categoria');
+    await queryInterface.dropTable('Veiculos');
   }
 };

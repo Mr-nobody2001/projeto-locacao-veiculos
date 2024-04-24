@@ -1,8 +1,8 @@
-import {Cliente} from "./entities/cliente.entity";
+import { ClienteS } from './entities/cliente.entity';
 
 export const clienteProviders = [
-    {
-        provide: 'CLIENTE_REPOSITORY',
-        useValue: Cliente,
-    },
+  {
+    provide: 'CLIENTE_REPOSITORY',
+    useValue: ClienteS,
+  },
 ];
