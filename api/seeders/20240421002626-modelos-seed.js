@@ -14,10 +14,10 @@ module.exports = {
       { nome: 'Utilitário', createdAt: new Date(), updatedAt: new Date() }
     ];
 
-    await queryInterface.bulkInsert('categorias', categoriasData, {});
+    await queryInterface.bulkInsert('Categorias', categoriasData, {});
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('categorias', null, {});
+    await queryInterface.bulkDelete('Categorias', null, {});
   }
 };

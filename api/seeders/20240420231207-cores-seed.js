@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    async up(queryInterface, Sequelize) {
+    async up(queryInterface) {
         const currentDate = new Date();
         const colors = [
             {nome: 'Preto', createdAt: currentDate, updatedAt: currentDate},
@@ -15,10 +15,10 @@ module.exports = {
             {nome: 'Laranja', createdAt: currentDate, updatedAt: currentDate},
         ];
 
-        return queryInterface.bulkInsert('cores', colors);
+        return queryInterface.bulkInsert('Cores', colors);
     },
 
     async down(queryInterface, Sequelize) {
-        return queryInterface.bulkDelete('cores', null, {});
+        return queryInterface.bulkDelete('Cores', null, {});
     }
 };
