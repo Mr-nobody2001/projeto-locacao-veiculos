@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
-import { ClienteS } from './entities/cliente.entity';
+import { Cliente } from './entities/cliente.entity';
 
 @Injectable()
 export class ClienteService {
   constructor(
     @Inject('CLIENTE_REPOSITORY')
-    private clienteRepository: typeof ClienteS,
+    private clienteRepository: typeof Cliente,
   ) {}
 
   async create(createClienteDto: CreateClienteDto) {

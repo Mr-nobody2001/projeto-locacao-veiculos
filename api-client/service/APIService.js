@@ -34,7 +34,7 @@ function getCustomHeaders() {
 export default {
     apiCall(baseURL = '') {
         let call = axios.create({
-            baseURL: baseURL || 'http://localhost:3000/' ,
+            baseURL: baseURL || process.env.VUE_APP_API_URL,
             headers: getCustomHeaders(),
             timeout: 60 * 120 * 1000,
         });
