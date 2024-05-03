@@ -7,6 +7,7 @@ import {
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { Cliente } from './entities/cliente.entity';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class ClienteService {
@@ -29,13 +30,15 @@ export class ClienteService {
       throw new BadRequestException('Esse cpf já está sendo usado');
     }
 
+    const senha = await this.encriptarSenha(createClienteDto.senha);
+
     return await this.clienteRepository.create({
       nome: createClienteDto.nome,
       data_nascimento: createClienteDto.data_nascimento,
       cpf: createClienteDto.cpf,
       telefone: createClienteDto.telefone,
       email: createClienteDto.email,
-      senha: createClienteDto.senha,
+      senha: senha,
       endereco: createClienteDto.endereco,
       status: true,
     });
@@ -55,8 +58,20 @@ export class ClienteService {
     return cliente;
   }
 
+  async findByEmail(email: string) {
+    const cliente = await this.clienteRepository.findOne({ where: { email: email } });
+
+    if (!cliente) {
+      throw new NotFoundException('Cliente não encontrado');
+    }
+
+    return cliente;
+  }
+
   async update(id: number, updateClienteDto: UpdateClienteDto) {
     let cliente = await this.findOne(id);
+
+    const senha =  updateClienteDto.senha ? await this.encriptarSenha(updateClienteDto.senha) : cliente.senha;
 
     const clienteAtualizado = {
       nome: updateClienteDto.nome || cliente.nome,
@@ -65,7 +80,7 @@ export class ClienteService {
       cpf: updateClienteDto.cpf || cliente.cpf,
       telefone: updateClienteDto.telefone || cliente.telefone,
       email: updateClienteDto.email || cliente.email,
-      senha: updateClienteDto.senha || cliente.senha,
+      senha: senha,
       endereco: updateClienteDto.endereco || cliente.endereco,
       status: true,
     };
@@ -95,5 +110,9 @@ export class ClienteService {
       },
     });
     return count > 0;
+  }
+
+  async encriptarSenha(senha) {
+    return await bcrypt.hash(senha, 10);
   }
 }

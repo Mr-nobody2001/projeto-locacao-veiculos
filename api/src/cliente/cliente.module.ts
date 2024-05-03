@@ -10,6 +10,7 @@ import {clienteProviders} from "./cliente.providers";
     providers: [ClienteService,
         ...clienteProviders,
     ],
+    exports: [ClienteService],
 })
 export class ClienteModule {
 }
