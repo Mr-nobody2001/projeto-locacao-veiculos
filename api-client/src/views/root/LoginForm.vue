@@ -81,7 +81,7 @@ export default defineComponent({
 
 <style scoped>
 .cardColor {
-  background-color: rgba(255, 255, 255, 0.5) !important;
-  border-color: white !important;
+  background-color: #fff !important;
+  border-color: #fff !important;
 }
 </style>
