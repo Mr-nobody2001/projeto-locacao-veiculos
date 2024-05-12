@@ -13,9 +13,14 @@ function getUserId() {
 
 export default {
     apiCall(baseURL = '') {
+        let headers = {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        }
+
         let call = axios.create({
             baseURL: baseURL || process.env.VUE_APP_API_URL,
-            headers: getCustomHeaders(),
+            headers: baseURL ? headers : getCustomHeaders(headers),
             timeout: 60 * 120 * 1000,
         });
 
@@ -46,13 +51,7 @@ export default {
     },
 }
 
-function getCustomHeaders() {
-
-    let headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-    }
-
+function getCustomHeaders(headers) {
     const token = getLocalToken();
     if (token && token !== 'undefined') {
         headers.Authorization = `Bearer ${token}`;
@@ -61,9 +60,7 @@ function getCustomHeaders() {
         if (clienteId) {
             headers.UserId = clienteId;
         }
-
-        console.log(clienteId)
-
-        return headers;
     }
+
+    return headers;
 }
