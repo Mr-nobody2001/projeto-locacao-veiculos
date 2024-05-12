@@ -112,7 +112,7 @@ export class ClienteService {
     return count > 0;
   }
 
-  async encriptarSenha(senha) {
+  async encriptarSenha(senha: string) {
     return await bcrypt.hash(senha, 10);
   }
 }

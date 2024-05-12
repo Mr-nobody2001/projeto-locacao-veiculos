@@ -2,9 +2,9 @@ import {Injectable, UnauthorizedException} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {ClienteService} from "../cliente/cliente.service";
 import {Cliente} from "../cliente/entities/cliente.entity";
-import {UserPayload} from "./models/UserPayload";
+import {ClientePayload} from "./models/ClientePayload";
 import {JwtService} from "@nestjs/jwt";
-import {UserToken} from "./models/UserToken";
+import {ClienteToken} from "./models/ClienteToken";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
     ) {
     }
 
-    async validateUser(email: string, password: string) {
+    async validarCliente(email: string, password: string) {
         const cliente = await this.clienteService.findByEmail(email);
 
         if (cliente) {
@@ -31,13 +31,16 @@ export class AuthService {
         throw new UnauthorizedException('O endereço de e-mail ou senha fornecidos está incorreto.');
     }
 
-    async login(user: Cliente): Promise<UserToken> {
-        const payload: UserPayload = {
-            sub: user.id,
-            email: user.email,
-            name: user.nome,
+    async login(cliente: Cliente): Promise<ClienteToken> {
+        const payload = {
+            sub: cliente.id,
+            email: cliente.email,
+            name: cliente.nome,
         };
 
-        return {access_token: this.jwtService.sign(payload)};
+        return {
+            payload: { ...payload },
+            access_token: this.jwtService.sign(payload)
+        };
     }
 }

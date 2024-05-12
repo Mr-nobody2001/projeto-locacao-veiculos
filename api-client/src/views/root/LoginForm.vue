@@ -22,7 +22,7 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field v-model="email" :rules="emailRule" label="Username" required variant="outlined"/>
+                                <v-text-field v-model="email" :rules="emailRule" label="email" required variant="outlined"/>
                             </v-col>
 
                             <v-col cols="12">
@@ -36,7 +36,7 @@
                             </v-col>
 
                             <v-col class="d-flex justify-center mt-2" cols="12">
-                                <v-btn class="" type="submit" color="primary" @click="enviar()">
+                                <v-btn class="" type="submit" color="primary" :loading="loading" @click="login()">
                                     Entrar
                                 </v-btn>
                             </v-col>
@@ -50,11 +50,14 @@
 
 <script>
 import { defineComponent } from 'vue';
+import AuthService from "../../../service/AuthService";
+import {erro} from "@/toast/toast";
 
 export default defineComponent({
     name: "LoginForm",
     data() {
         return {
+            loading: false,
             email: "",
             senha: "",
             emailRule: [
@@ -72,8 +75,23 @@ export default defineComponent({
         }
     },
     methods: {
-        enviar() {
-            
+        login() {
+          this.loading = true;
+
+          const dataLogin = {
+            email: this.email,
+            password: this.senha,
+          }
+
+          AuthService.login(dataLogin)
+              .then(response => {
+                this.$store.dispatch('login', response.data)
+              })
+              .catch((err) => {
+                console.error('Erro: ', err);
+                erro('Ocorreu um erro durante o cadastro do cliente.')
+              })
+              .finally(() => this.loading = false);
         }
     },
 });

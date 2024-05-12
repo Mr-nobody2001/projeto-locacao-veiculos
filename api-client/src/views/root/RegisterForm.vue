@@ -124,7 +124,7 @@
 import { validarCPF, validarDataNascimento, validarEmail, validarTelefone } from "@/helpers";
 import { defineComponent } from "vue";
 import {mask} from 'vue-the-mask';
-import UsuarioService from "../../../service/UsuarioService";
+import UsuarioService from "../../../service/ClienteService";
 import {erro} from "@/toast/toast";
 
 export default defineComponent({

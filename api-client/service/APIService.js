@@ -1,35 +1,15 @@
 import axios from 'axios';
-// import store from '@/store';
-// import router from '@/router';
+import store from '@/store';
+import router from "@/router/router";
 
-function getCustomHeaders() {
-
-    let headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-    }
-
-    // const token = getLocalToken();
-    // if (token && token !== 'undefined') {
-    //     headers.Authorization = `Bearer ${token}`;
-    // }
-    //
-    // const userId = getUserId();
-    // if (userId) {
-    //     headers.UserId = userId;
-    // }
-
-    return headers;
+function getLocalToken() {
+    return sessionStorage.getItem('app-auth-token');
 }
 
-// function getLocalToken() {
-//     return sessionStorage.getItem('app-auth-token');
-// }
-
-// function getUserId() {
-//     const { getUserId } = store.getters;
-//     return getUserId;
-// }
+function getUserId() {
+    const { getCliente } = store.getters;
+    return getCliente.id;
+}
 
 export default {
     apiCall(baseURL = '') {
@@ -51,9 +31,9 @@ export default {
                 if (error.response && error.response.status) {
                     switch (error.response.status) {
                         case 401:
-                        // case 403:
-                        //     router.push({ name: 'Login' });
-                        //     break;
+                        case 403:
+                            router.push({name: 'Login'});
+                            break;
                     }
                     return Promise.reject(error.response);
                 } else {
@@ -64,4 +44,26 @@ export default {
 
         return call;
     },
+}
+
+function getCustomHeaders() {
+
+    let headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    const token = getLocalToken();
+    if (token && token !== 'undefined') {
+        headers.Authorization = `Bearer ${token}`;
+
+        const clienteId = getUserId();
+        if (clienteId) {
+            headers.UserId = clienteId;
+        }
+
+        console.log(clienteId)
+
+        return headers;
+    }
 }
