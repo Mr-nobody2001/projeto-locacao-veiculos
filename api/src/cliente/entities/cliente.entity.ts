@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import {DataTypes} from "sequelize";
 import {Column, Table, Model} from "sequelize-typescript";
 
 @Table

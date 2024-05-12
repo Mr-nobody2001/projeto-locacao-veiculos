@@ -1,6 +1,6 @@
 import {PartialType} from '@nestjs/mapped-types';
 import {CreateClienteDto} from './create-cliente.dto';
-import {IsDefined, IsEmail, IsNotEmpty, IsString} from "class-validator";
+import {IsEmail, IsNotEmpty, IsString} from "class-validator";
 
 export class UpdateClienteDto extends PartialType(CreateClienteDto) {
     @IsString()

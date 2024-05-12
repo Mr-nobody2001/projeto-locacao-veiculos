@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      informacoesVeiculoId: {
+      informacoesVeiculosId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -50,11 +50,11 @@ module.exports = {
     });
 
     await queryInterface.addConstraint('Veiculos', {
-      fields: ['informacoesVeiculoId'],
+      fields: ['informacoesVeiculosId'],
       type: 'foreign key',
-      name: 'FK_veiculos_informacoes_veiculo',
+      name: 'FK_veiculos_informacoes_veiculos',
       references: {
-        table: 'InformacoesVeiculo',
+        table: 'InformacoesVeiculos',
         field: 'id'
       },
       onUpdate: 'RESTRICT',
@@ -87,7 +87,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_informacoes_veiculo');
+    await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_informacoes_veiculos');
     await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_cores');
     await queryInterface.removeConstraint('Veiculos', 'FK_veiculos_categoria');
     await queryInterface.dropTable('Veiculos');

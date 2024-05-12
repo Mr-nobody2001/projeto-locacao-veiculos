@@ -1,6 +1,6 @@
 export default [{
     path: '/admin',
-    component: () => import('@/views/CadastroInformacaoVeiculo/EditItem.vue'),
+    component: () => import('@/views/cadastro-informacao-veiculo/EditItem.vue'),
     // children: [
     //     {
     //         name: 'Cadastro de Informações de Veículo',

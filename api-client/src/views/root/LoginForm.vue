@@ -89,7 +89,7 @@ export default defineComponent({
               })
               .catch((err) => {
                 console.error('Erro: ', err);
-                erro('Ocorreu um erro durante o cadastro do cliente.')
+                erro('Credenciais de login inválidas. Por favor, verifique seu usuário ou senha.')
               })
               .finally(() => this.loading = false);
         }

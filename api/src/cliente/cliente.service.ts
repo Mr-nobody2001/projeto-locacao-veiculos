@@ -1,118 +1,119 @@
 import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
+    BadRequestException,
+    Inject,
+    Injectable,
+    NotFoundException,
 } from '@nestjs/common';
-import { CreateClienteDto } from './dto/create-cliente.dto';
-import { UpdateClienteDto } from './dto/update-cliente.dto';
-import { Cliente } from './entities/cliente.entity';
+import {CreateClienteDto} from './dto/create-cliente.dto';
+import {UpdateClienteDto} from './dto/update-cliente.dto';
+import {Cliente} from './entities/cliente.entity';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class ClienteService {
-  constructor(
-    @Inject('CLIENTE_REPOSITORY')
-    private clienteRepository: typeof Cliente,
-  ) {}
-
-  async create(createClienteDto: CreateClienteDto) {
-    createClienteDto.cpf = createClienteDto.cpf.replace(/\D/g, '');
-    createClienteDto.telefone = createClienteDto.telefone.replace(/\D/g, '');
-
-    const emailExiste = await this.emailExits(createClienteDto.email);
-    if (emailExiste) {
-      throw new BadRequestException('Esse email já está sendo usado');
+    constructor(
+        @Inject('CLIENTE_REPOSITORY')
+        private clienteRepository: typeof Cliente,
+    ) {
     }
 
-    const cpfExiste = await this.cpfExits(createClienteDto.cpf);
-    if (cpfExiste) {
-      throw new BadRequestException('Esse cpf já está sendo usado');
+    async create(createClienteDto: CreateClienteDto) {
+        createClienteDto.cpf = createClienteDto.cpf.replace(/\D/g, '');
+        createClienteDto.telefone = createClienteDto.telefone.replace(/\D/g, '');
+
+        const emailExiste = await this.emailExits(createClienteDto.email);
+        if (emailExiste) {
+            throw new BadRequestException('Esse email já está sendo usado');
+        }
+
+        const cpfExiste = await this.cpfExits(createClienteDto.cpf);
+        if (cpfExiste) {
+            throw new BadRequestException('Esse cpf já está sendo usado');
+        }
+
+        const senha = await this.encriptarSenha(createClienteDto.senha);
+
+        return await this.clienteRepository.create({
+            nome: createClienteDto.nome,
+            data_nascimento: createClienteDto.data_nascimento,
+            cpf: createClienteDto.cpf,
+            telefone: createClienteDto.telefone,
+            email: createClienteDto.email,
+            senha: senha,
+            endereco: createClienteDto.endereco,
+            status: true,
+        });
     }
 
-    const senha = await this.encriptarSenha(createClienteDto.senha);
-
-    return await this.clienteRepository.create({
-      nome: createClienteDto.nome,
-      data_nascimento: createClienteDto.data_nascimento,
-      cpf: createClienteDto.cpf,
-      telefone: createClienteDto.telefone,
-      email: createClienteDto.email,
-      senha: senha,
-      endereco: createClienteDto.endereco,
-      status: true,
-    });
-  }
-
-  findAll() {
-    return this.clienteRepository.findAll();
-  }
-
-  async findOne(id: number) {
-    const cliente = await this.clienteRepository.findByPk(id);
-
-    if (!cliente) {
-      throw new NotFoundException('Cliente não encontrado');
+    findAll() {
+        return this.clienteRepository.findAll();
     }
 
-    return cliente;
-  }
+    async findOne(id: number) {
+        const cliente = await this.clienteRepository.findByPk(id);
 
-  async findByEmail(email: string) {
-    const cliente = await this.clienteRepository.findOne({ where: { email: email } });
+        if (!cliente) {
+            throw new NotFoundException('Cliente não encontrado');
+        }
 
-    if (!cliente) {
-      throw new NotFoundException('Cliente não encontrado');
+        return cliente;
     }
 
-    return cliente;
-  }
+    async findByEmail(email: string) {
+        const cliente = await this.clienteRepository.findOne({where: {email: email}});
 
-  async update(id: number, updateClienteDto: UpdateClienteDto) {
-    let cliente = await this.findOne(id);
+        if (!cliente) {
+            throw new NotFoundException('Cliente não encontrado');
+        }
 
-    const senha =  updateClienteDto.senha ? await this.encriptarSenha(updateClienteDto.senha) : cliente.senha;
+        return cliente;
+    }
 
-    const clienteAtualizado = {
-      nome: updateClienteDto.nome || cliente.nome,
-      data_nascimento:
-        new Date(updateClienteDto.data_nascimento) || cliente.data_nascimento,
-      cpf: updateClienteDto.cpf || cliente.cpf,
-      telefone: updateClienteDto.telefone || cliente.telefone,
-      email: updateClienteDto.email || cliente.email,
-      senha: senha,
-      endereco: updateClienteDto.endereco || cliente.endereco,
-      status: true,
-    };
+    async update(id: number, updateClienteDto: UpdateClienteDto) {
+        let cliente = await this.findOne(id);
 
-    await cliente.update(clienteAtualizado);
-  }
+        const senha = updateClienteDto.senha ? await this.encriptarSenha(updateClienteDto.senha) : cliente.senha;
 
-  async remove(id: number) {
-    const cliente = await this.findOne(id);
+        const clienteAtualizado = {
+            nome: updateClienteDto.nome || cliente.nome,
+            data_nascimento:
+                new Date(updateClienteDto.data_nascimento) || cliente.data_nascimento,
+            cpf: updateClienteDto.cpf || cliente.cpf,
+            telefone: updateClienteDto.telefone || cliente.telefone,
+            email: updateClienteDto.email || cliente.email,
+            senha: senha,
+            endereco: updateClienteDto.endereco || cliente.endereco,
+            status: true,
+        };
 
-    await cliente.destroy();
-  }
+        await cliente.update(clienteAtualizado);
+    }
 
-  async emailExits(email: string) {
-    const count = await this.clienteRepository.count({
-      where: {
-        email,
-      },
-    });
-    return count > 0;
-  }
+    async remove(id: number) {
+        const cliente = await this.findOne(id);
 
-  async cpfExits(cpf: string) {
-    const count = await this.clienteRepository.count({
-      where: {
-        cpf,
-      },
-    });
-    return count > 0;
-  }
+        await cliente.destroy();
+    }
 
-  async encriptarSenha(senha: string) {
-    return await bcrypt.hash(senha, 10);
-  }
+    async emailExits(email: string) {
+        const count = await this.clienteRepository.count({
+            where: {
+                email,
+            },
+        });
+        return count > 0;
+    }
+
+    async cpfExits(cpf: string) {
+        const count = await this.clienteRepository.count({
+            where: {
+                cpf,
+            },
+        });
+        return count > 0;
+    }
+
+    async encriptarSenha(senha: string) {
+        return await bcrypt.hash(senha, 10);
+    }
 }

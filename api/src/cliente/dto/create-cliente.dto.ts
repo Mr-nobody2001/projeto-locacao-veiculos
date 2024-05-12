@@ -1,4 +1,4 @@
-import {IsAlpha, IsAlphanumeric, IsDate, IsDefined, IsEmail, IsNotEmpty, IsString} from "class-validator";
+import {IsDefined, IsEmail, IsNotEmpty, IsString} from "class-validator";
 
 export class CreateClienteDto {
     @IsDefined()
