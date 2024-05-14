@@ -15,6 +15,11 @@ export default [{
             component:  () => import('@/views/root/RegisterForm.vue'),
         },
         {
+            path: "/cadastro-pagamento",
+            name: "PaymentRegistration",
+            component:  () => import('@/views/root/PaymentRegistration.vue'),
+        },
+        {
             path: "/login",
             name: "LoginForm",
             component: () => import('@/views/root/LoginForm.vue'),
