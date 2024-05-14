@@ -4,8 +4,10 @@ import { UpdateVeiculoDto } from './dto/update-veiculo.dto';
 
 @Injectable()
 export class VeiculoService {
-  create(createVeiculoDto: CreateVeiculoDto) {
-    return 'This action adds a new veiculo';
+  async create(createVeiculoDto: CreateVeiculoDto) {
+    
+
+    return ;
   }
 
   findAll() {

@@ -1,9 +1,11 @@
-import cadastroInformacoesVeiculo from "@/router/cadastro-informacoes-veiculo";
-import root from "@/router/root";
+import site from "@/router/site";
+import auth from "./auth";
+import cadastroInformacoesVeiculo from "./cadastro-informacoes-veiculo";
 
 let routes = []
 routes = routes.concat(
-    root,
+    site,
+    auth,
     cadastroInformacoesVeiculo,
 );
 

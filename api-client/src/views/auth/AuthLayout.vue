@@ -9,7 +9,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import RegisterFooter from "../components/RegisterFooter.vue";
+import RegisterFooter from "../../components/RegisterFooter.vue";
 
 export default defineComponent({
     name: "AppLayout",
@@ -26,5 +26,9 @@ export default defineComponent({
 
 .layout-content {
     margin-bottom: 60px;
+}
+
+.header-content {
+    height: 98px;
 }
 </style>

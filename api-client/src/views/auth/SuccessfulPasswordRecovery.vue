@@ -17,22 +17,18 @@
 
             <v-card-text>
                 <v-form @submit.prevent>
-                    <v-container>
+                    <v-container class="text">
                         <h1 class="d-flex justify-center m-20px">Recuperação de senha</h1>
                         <v-row>
-                            <v-col class="mt-10" cols="12">
-                                <v-text-field 
-                                    v-model="email" 
-                                    :rules="emailRule" 
-                                    label="Email"
-                                    required
-                                    variant="outlined"
-                                >
-                                </v-text-field>
+                            <v-col class="d-flex justify-center mt-5" cols="12">
+                                <v-icon class="icon-success" icon="mdi-check-circle-outline"></v-icon>
+                            </v-col>
+                            <v-col class="d-flex justify-center" cols="12">
+                                <h3>Enviamos um link de redefinição de senha para email!</h3>
                             </v-col>
                             <v-col class="d-flex justify-center mt-2" cols="12">
-                                <v-btn class="" type="submit" color="primary" @click="enviar()">
-                                    Entrar
+                                <v-btn class="" type="submit" color="primary" @click="retornar()">
+                                    Retornar
                                 </v-btn>
                             </v-col>
                         </v-row>
@@ -47,13 +43,30 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "RecoveryPassword",
+    name: "successfulPasswordRecovery",
+    methods: {
+        retornar() {
+
+        }
+    }
+
 })
 </script>
 
 <style scoped>
+.header-content {
+    height: 98px;
+}
 .cardColor {
-  background-color: #fff !important;
-  border-color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: white !important;
+}
+.text {
+    text-align: center;
+    line-height: 28px;
+}
+.icon-success {
+    font-size: 100px;
+    color: #5D67D6;
 }
 </style>

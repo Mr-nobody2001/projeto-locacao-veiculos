@@ -124,8 +124,8 @@
 import { validarCPF, validarDataNascimento, validarEmail, validarTelefone } from "@/helpers";
 import { defineComponent } from "vue";
 import {mask} from 'vue-the-mask';
-import UsuarioService from "../../../service/ClienteService";
 import {erro} from "@/toast/toast";
+import ClienteService from "../../../service/ClienteService";
 
 export default defineComponent({
     name: "RegisterForm",
@@ -242,7 +242,7 @@ export default defineComponent({
           endereco: this.endereco,
         };
 
-        UsuarioService
+        ClienteService
             .cadastrarCliente(data)
             .then(() => this.$router.push({ name: 'LoginForm' }))
             .catch((err) => {
@@ -263,16 +263,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.header-content {
-    height: 98px;
-}
-
 .btn {
     background-color: #5D67D6;
 }
 
 .cardColor {
-  background-color: #fff !important;
-  border-color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: white !important;
 }
 </style>
