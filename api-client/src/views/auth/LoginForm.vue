@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import { erro } from '@/toast/toast';
+import AuthService from '../../../service/AuthService';
 import { defineComponent } from 'vue';
 
 export default defineComponent({

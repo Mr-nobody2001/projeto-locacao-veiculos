@@ -124,8 +124,8 @@
 import { validarCPF, validarDataNascimento, validarEmail, validarTelefone } from "@/helpers";
 import { defineComponent } from "vue";
 import {mask} from 'vue-the-mask';
-import UsuarioService from "../../../service/UsuarioService";
 import {erro} from "@/toast/toast";
+import ClienteService from "../../../service/ClienteService";
 
 export default defineComponent({
     name: "RegisterForm",
@@ -242,7 +242,7 @@ export default defineComponent({
           endereco: this.endereco,
         };
 
-        UsuarioService
+        ClienteService
             .cadastrarCliente(data)
             .then(() => this.$router.push({ name: 'LoginForm' }))
             .catch((err) => {
