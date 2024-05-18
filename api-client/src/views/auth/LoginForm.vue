@@ -1,8 +1,8 @@
 <template>
-    <v-container class="mt-6 mx-5" fluid>
+    <v-container fluid>
         <header>
             <div class="header-content d-flex align-center">
-                <router-link to="/cadastro-usuario" class="ms-auto">
+                <router-link :to="{ name: 'RegisterForm' }" class="ms-auto">
                     <v-btn variant="text" class="btn-back" color="primary">
                         Cadastre-se
                         <v-icon icon="mdi-chevron-right" start></v-icon>
@@ -22,13 +22,13 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field v-model="email" :rules="emailRule" label="email" required variant="outlined"/>
+                                <v-text-field v-model="email" :rules="emailRule" label="Email" required variant="outlined"/>
                             </v-col>
 
                             <v-col cols="12">
                                 <v-text-field type="password" v-model="senha" :rules="senhaRule" label="Password" required variant="outlined"/>
 
-                              <router-link to="/recuperar-senha" class="ms-auto">
+                              <router-link :to="{ name: 'RecoveryPassword' }" class="ms-auto">
                                   <div class="d-flex justify-center justify-sm-end mt-5 mt-sm-n5">
                                       <v-btn class="text-none" size="small" variant="text" color="primary">Esqueceu a senha?</v-btn>
                                   </div>
@@ -36,7 +36,7 @@
                             </v-col>
 
                             <v-col class="d-flex justify-center mt-2" cols="12">
-                                <v-btn class="" type="submit" color="primary" :loading="loading" @click="login()">
+                                <v-btn class="" type="submit" color="primary" @click="enviar()">
                                     Entrar
                                 </v-btn>
                             </v-col>
@@ -49,9 +49,9 @@
 </template>
 
 <script>
+import { erro } from '@/toast/toast';
+import AuthService from '../../../service/AuthService';
 import { defineComponent } from 'vue';
-import AuthService from "../../../service/AuthService";
-import {erro} from "@/toast/toast";
 
 export default defineComponent({
     name: "LoginForm",
@@ -75,23 +75,23 @@ export default defineComponent({
         }
     },
     methods: {
-        login() {
-          this.loading = true;
+        enviar() {
+            this.loading = true;
 
-          const dataLogin = {
-            email: this.email,
-            password: this.senha,
-          }
+            const dataLogin = {
+                email: this.email,
+                password: this.senha,
+            }
 
-          AuthService.login(dataLogin)
-              .then(response => {
-                this.$store.dispatch('login', response.data)
-              })
-              .catch((err) => {
-                console.error('Erro: ', err);
-                erro('Credenciais de login inválidas. Por favor, verifique seu usuário ou senha.')
-              })
-              .finally(() => this.loading = false);
+            AuthService.login(dataLogin)
+                .then(response => {
+                    this.$store.dispatch('login', response.data)
+                })
+                .catch((err) => {
+                    console.error('Erro: ', err);
+                    erro('Credenciais de login inválidas. Por favor, verifique seu usuário ou senha.')
+                })
+                .finally(() => this.loading = false);
         }
     },
 });
@@ -99,7 +99,7 @@ export default defineComponent({
 
 <style scoped>
 .cardColor {
-  background-color: #fff !important;
-  border-color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: white !important;
 }
 </style>

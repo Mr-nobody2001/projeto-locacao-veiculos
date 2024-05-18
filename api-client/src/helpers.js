@@ -74,3 +74,28 @@ export const validarDataNascimento = (dataDeNasc) => {
 
     return true;
 }
+
+// Função para verificar se um número de cartão de crédito é válido usando o algoritmo de Luhn
+export const isValidCardNumber = (cardNumber) => {
+    // Remove todos os caracteres não numéricos do número do cartão
+    const cleanCardNumber = cardNumber.replace(/\D/g, '');
+    
+    // Verifica se o número do cartão tem pelo menos 13 dígitos e passa pela fórmula de Luhn
+    if (/^\d{13,}$/.test(cleanCardNumber)) {
+      let sum = 0;
+      let alternate = false;
+      for (let i = cleanCardNumber.length - 1; i >= 0; i--) {
+        let digit = parseInt(cleanCardNumber.charAt(i));
+        if (alternate) {
+          digit *= 2;
+          if (digit > 9) {
+            digit -= 9;
+          }
+        }
+        sum += digit;
+        alternate = !alternate;
+      }
+      return sum % 10 === 0;
+    }
+    return false;
+  }
