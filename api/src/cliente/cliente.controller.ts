@@ -2,13 +2,16 @@ import {Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpCode}
 import {ClienteService} from './cliente.service';
 import {CreateClienteDto} from './dto/create-cliente.dto';
 import {UpdateClienteDto} from './dto/update-cliente.dto';
+import {IsPublic} from "../auth/decorators/is-public.decorator";
 
 @Controller('cliente')
 export class ClienteController {
     constructor(private readonly clienteService: ClienteService) {
     }
 
+
     @Post()
+    @IsPublic()
     @HttpCode(HttpStatus.CREATED)
     create(@Body() createClienteDto: CreateClienteDto) {
         return this.clienteService.create(createClienteDto);
