@@ -28,7 +28,7 @@ export class InformacoesVeiculoService {
     }
 
     findOne(id: number) {
-        return `This action returns a #${id} informacoesVeiculo`;
+        return this.informacoesVeiculoRepository.findByPk(id);
     }
 
     update(id: number, updateInformacoesVeiculoDto: UpdateInformacoesVeiculoDto) {
