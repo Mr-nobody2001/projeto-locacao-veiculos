@@ -20,7 +20,7 @@ export default [{
             component: () => import('@/views/auth/LoginForm.vue'),
         },
         {
-            path: "/cadastro-pagamento",
+            path: "cadastro-pagamento",
             name: "PaymentRegistration",
             component:  () => import('@/views/auth/PaymentRegistration.vue'),
         },

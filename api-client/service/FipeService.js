@@ -12,4 +12,8 @@ export default {
     getDataDeLancamentoVeiculo(marcaVeiculo, modeloVeiculo) {
         return APIService.apiCall('https://parallelum.com.br').get(`/fipe/api/v1/carros/marcas/${marcaVeiculo}/modelos/${modeloVeiculo}/anos`);
     },
+
+    getdetalhesVeiculos(url){
+        return APIService.apiCall('https://parallelum.com.br').get(`${url}`);
+    }
 }

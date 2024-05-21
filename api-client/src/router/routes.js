@@ -1,12 +1,14 @@
 import site from "@/router/site";
 import auth from "./auth";
 import cadastroInformacoesVeiculo from "./cadastro-informacoes-veiculo";
+import listaInformacoesVeiculo from "./lista-informacoes-veiculo";
 
 let routes = []
 routes = routes.concat(
     site,
     auth,
     cadastroInformacoesVeiculo,
+    listaInformacoesVeiculo
 );
 
 // routes.push({
