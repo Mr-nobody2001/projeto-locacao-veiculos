@@ -10,4 +10,7 @@ export default {
     atualizarInformacaoVeiculo(id, informacaoVeiculo) {
         return APIService.apiCall().patch(`informacao-veiculo/${id}`, informacaoVeiculo);
     },
+    buscarInformacaoVeiculos(){
+        return APIService.apiCall().get(`informacao-veiculo`);
+    }
 }
