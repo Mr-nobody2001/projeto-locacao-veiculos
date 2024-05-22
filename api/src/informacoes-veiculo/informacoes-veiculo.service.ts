@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Inject, Injectable, BadRequestException} from '@nestjs/common';
 import {CreateInformacoesVeiculoDto} from './dto/create-informacoes-veiculo.dto';
 import {UpdateInformacoesVeiculoDto} from './dto/update-informacoes-veiculo.dto';
 import {InformacoesVeiculo} from "./entities/informacoes-veiculo.entity";
@@ -31,8 +31,22 @@ export class InformacoesVeiculoService {
         return this.informacoesVeiculoRepository.findByPk(id);
     }
 
-    update(id: number, updateInformacoesVeiculoDto: UpdateInformacoesVeiculoDto) {
-        return `This action updates a #${id} informacoesVeiculo`;
+    async update(id: number, updateInformacoesVeiculoDto: UpdateInformacoesVeiculoDto) {
+        const record = await this.informacoesVeiculoRepository.findByPk(id);
+        if (!record) {
+            throw new BadRequestException('Informações do veículo não encontrada');
+        }
+
+        let foto = record.foto;
+        if (updateInformacoesVeiculoDto.foto) {
+            foto = await this.fotosService.salvarFoto(updateInformacoesVeiculoDto.foto, 'veiculo');
+        }
+        
+        return await this.informacoesVeiculoRepository.update({
+            foto,
+            detalhesVeiculoAPI: updateInformacoesVeiculoDto.detalhesVeiculoAPI,
+            caracteristicas: updateInformacoesVeiculoDto.caracteristicas.join(','),
+        }, { where: { id } });
     }
 
     remove(id: number) {

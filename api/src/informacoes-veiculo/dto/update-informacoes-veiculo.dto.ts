@@ -4,9 +4,6 @@ import {CreateInformacoesVeiculoDto} from "./create-informacoes-veiculo.dto";
 
 export class UpdateInformacoesVeiculoDto extends PartialType(CreateInformacoesVeiculoDto) {
     @IsNotEmpty()
-    foto: string;
-
-    @IsNotEmpty()
     @IsUrl({}, {message: 'Os detalhes do veículo devem ser uma URL válida.'})
     detalhesVeiculoAPI: string;
 

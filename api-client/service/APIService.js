@@ -37,7 +37,8 @@ export default {
                     switch (error.response.status) {
                         case 401:
                         case 403:
-                            router.push({name: 'Login'});
+                            sessionStorage.setItem("redirectLogin", router.currentRoute.value.fullPath);
+                            router.push({name: 'LoginForm'});
                             break;
                     }
                     return Promise.reject(error.response);

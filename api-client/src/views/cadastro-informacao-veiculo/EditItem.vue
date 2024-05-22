@@ -71,7 +71,7 @@
         </v-col>
         <v-col cols="10" sm="8" md="6" lg="4" class="d-flex justify-center">
           <v-img
-              v-if="Array.isArray(this.imagemVeiculo) ? this.imagemVeiculo.length : this.imagemVeiculo"
+              v-if="(Array.isArray(this.imagemVeiculo) ? this.imagemVeiculo.length : this.imagemVeiculo) || isUpdate"
               height="200px"
               width="300px"
               :src="imagemBase64"
@@ -88,8 +88,22 @@
               @click="cadastrarInformacaoVeiculo"
               :disabled="!(marcaSelecionada && modeloSelecionado && anoDeLancamentoSelecionado && caracteristicasSelecionadas.length && (Array.isArray(this.imagemVeiculo) ? this.imagemVeiculo.length : this.imagemVeiculo))"
               :loading="loadingCriarInformacaosVeiculo"
+              v-if="!isUpdate"
           >
             Cadastrar
+          </v-btn>
+
+          <v-btn
+              class="btn"
+              type="submit"
+              color="primary"
+              density="comfortable"
+              @click="atualizarInformacaoVeiculo"
+              :disabled="!(marcaSelecionada && modeloSelecionado && anoDeLancamentoSelecionado && caracteristicasSelecionadas.length)"
+              :loading="loadingCriarInformacaosVeiculo"
+              v-if="isUpdate"
+          >
+            Atualizar
           </v-btn>
         </v-col>
       </v-row>
@@ -99,12 +113,14 @@
 
 <script>
 import FipeService from '../../../service/FipeService';
-import {erro} from "@/toast/toast";
+import {erro, sucesso} from "@/toast/toast";
 import InformacoesVeiculoService from "../../../service/InformacoesVeiculoService";
+import { useRoute } from 'vue-router';
 
 export default {
 
   data: () => ({
+    id: null,
     loadingMarca: false,
     loadingModelo: false,
     loadingCriarInformacaosVeiculo: false,
@@ -138,14 +154,15 @@ export default {
       'Faróis de neblina',
       'Rodas de liga leve'
     ],
-    caracteristicasSelecionadas: []
+    caracteristicasSelecionadas: [],
+    isUpdate: false
   }),
 
   methods: {
     getMarcasVeiculo() {
       this.loadingMarca = true;
 
-      FipeService.getMarcasVeiculo()
+      return FipeService.getMarcasVeiculo()
           .then(response => (this.marcasVeiculo = response.data))
           .catch((err) => {
             console.error('Erro: ', err);
@@ -163,7 +180,7 @@ export default {
       this.modeloSelecionado = null;
       this.anoDeLancamentoSelecionado = null;
 
-      FipeService.getModelosVeiculo(marcaVeiculo.codigo)
+      return FipeService.getModelosVeiculo(marcaVeiculo.codigo)
           .then(response => {
             this.modelosVeiculo = response.data.modelos;
           })
@@ -182,12 +199,13 @@ export default {
 
       this.anoDeLancamentoSelecionado = null;
 
-      FipeService.getDataDeLancamentoVeiculo(
+      return FipeService.getDataDeLancamentoVeiculo(
           this.marcaSelecionada.codigo,
           modeloVeiculo.codigo
       )
           .then(response => {
             this.anosDeLancamento = response.data;
+            return this.anosDeLancamento;
           })
           .catch((err) => {
             console.error('Erro: ', err);
@@ -218,7 +236,30 @@ export default {
 
       InformacoesVeiculoService
           .cadastrarInformacaoVeiculo(dadosVeiculo)
-          .then()
+          .then(() => {
+            sucesso('Informações do veículo cadastradas com sucesso!');
+          })
+          .catch((err) => {
+            console.error('Erro: ', err);
+            erro("Ocorreu um problema ao tentar cadastrar as informações do veículo.");
+          })
+          .finally(() => this.loadingCriarInformacaosVeiculo = false);
+    },
+
+    atualizarInformacaoVeiculo() {
+      this.loadingCriarInformacaosVeiculo = true;
+
+      const dadosVeiculo = {
+        detalhesVeiculoAPI: `https://parallelum.com.br/fipe/api/v1/carros/marcas/${this.marcaSelecionada.codigo}/modelos/${this.modeloSelecionado.codigo}/anos/${this.anoDeLancamentoSelecionado}`,
+        caracteristicas: this.caracteristicasSelecionadas,
+        foto: this.imagemVeiculo ? this.imagemBase64 : null
+      };
+
+      InformacoesVeiculoService
+          .atualizarInformacaoVeiculo(this.$data.id, dadosVeiculo)
+          .then(() => {
+            sucesso('Informações do veículo atualizadas com sucesso!');
+          })
           .catch((err) => {
             console.error('Erro: ', err);
             erro("Ocorreu um problema ao tentar cadastrar as informações do veículo.");
@@ -228,7 +269,33 @@ export default {
   },
 
   mounted() {
-    this.getMarcasVeiculo();
+    const route = useRoute();
+    this.$data.id = route.params.id;
+
+    this.getMarcasVeiculo()
+      .then(() => {
+        if(this.$data.id !== undefined) {
+          this.$data.isUpdate = true;
+
+          InformacoesVeiculoService.buscarInformacaoVeiculo(this.$data.id)
+            .then((res) => {
+              const dados = res.data;
+              this.$data.caracteristicasSelecionadas = dados.caracteristicas.split(",");
+              this.$data.imagemBase64 = process.env.VUE_APP_API_URL + dados.foto;
+
+              const urlGetDetalhesVeiculo = dados.detalhesVeiculoAPI.replace("https://parallelum.com.br", "");
+              FipeService.getdetalhesVeiculos(urlGetDetalhesVeiculo)
+                .then(async (res) => {
+                  const dadosFipe = res.data;
+                  this.$data.marcaSelecionada = this.$data.marcasVeiculo.find((m) => m.nome === dadosFipe.Marca);
+                  await this.getModelosVeiculo(this.$data.marcaSelecionada);
+                  this.$data.modeloSelecionado = this.$data.modelosVeiculo.find((m) => m.nome === dadosFipe.Modelo);
+                  await this.getDataDeLancamentoVeiculo(this.$data.modeloSelecionado);
+                  this.$data.anoDeLancamentoSelecionado = this.$data.anosDeLancamento.find((a) => a.nome === `${dadosFipe.AnoModelo} ${dadosFipe.Combustivel}`)?.codigo;
+                });
+            });
+        }
+      });
   }
 };
 </script>

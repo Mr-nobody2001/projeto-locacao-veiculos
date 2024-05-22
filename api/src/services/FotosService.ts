@@ -11,9 +11,9 @@ export class FotosService {
             const base64Image = matches[2];
             const buffer = Buffer.from(base64Image, 'base64');
             const nomeArquivo = 'foto_veiculo_' + Date.now() + '.' + type;
-            const caminho = process.cwd() + `\\uploads\\${pasta}\\` + nomeArquivo;
+            const caminho = `/uploads/${pasta}/` + nomeArquivo;
 
-            fs.writeFileSync(caminho, buffer);
+            fs.writeFileSync(process.cwd() + caminho, buffer);
 
             return caminho;
         } catch (error) {
