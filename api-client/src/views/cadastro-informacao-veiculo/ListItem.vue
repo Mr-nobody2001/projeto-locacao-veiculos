@@ -42,7 +42,7 @@ export default {
             modelo: detalhesVeiculo.Modelo,
             ano: detalhesVeiculo.AnoModelo,
             caracteristicas: veiculo.caracteristicas,
-            imagem: veiculo.foto
+            imagem: process.env.VUE_APP_API_URL + veiculo.foto
           });
         }
       } catch (error) {
