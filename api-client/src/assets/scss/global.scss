@@ -3,6 +3,10 @@
 $background: #EEF0F9;
 $primary: #5D67D6;
 
+html {
+    overflow: hidden !important;
+}
+
 body {
     background: $background;
 }

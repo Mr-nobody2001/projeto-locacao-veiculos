@@ -3,7 +3,7 @@
     <v-card class="mx-auto mt-10 mb-10" max-width="80vw">
       <v-card-item>
         <div class="d-flex justify-center">
-          <img src="../../assets/img/logo.jpg" alt="Logo" width="140"/>
+          <img src="../../../assets/img/logo.jpg" alt="Logo" width="140"/>
         </div>
       </v-card-item>
       <v-row class="d-flex justify-center mt-10">
@@ -112,9 +112,9 @@
 </template>
 
 <script>
-import FipeService from '../../../service/FipeService';
+import FipeService from '../../../../service/FipeService';
 import {erro, sucesso} from "@/toast/toast";
-import InformacoesVeiculoService from "../../../service/InformacoesVeiculoService";
+import InformacoesVeiculoService from "../../../../service/InformacoesVeiculoService";
 import { useRoute } from 'vue-router';
 
 export default {

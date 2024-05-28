@@ -3,7 +3,7 @@
   <v-card class="mx-auto mt-10 mb-10" max-width="80vw">
     <v-card-item>
         <div class="d-flex justify-center">
-          <img src="../../assets/img/logo.jpg" alt="Logo" width="140"/>
+          <img src="../../../assets/img/logo.jpg" alt="Logo" width="140"/>
         </div>
       </v-card-item>
     <vehicle-card v-for="(veiculo, index) in veiculos" :key="index" :veiculo="veiculo" />
@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import FipeService from '../../../service/FipeService';
-import InformacoesVeiculoService from '../../../service/InformacoesVeiculoService';
-import VehicleCard from '../../components/VehicleCard.vue';
+import FipeService from '../../../../service/FipeService';
+import InformacoesVeiculoService from '../../../../service/InformacoesVeiculoService';
+import VehicleCard from '../../../components/VehicleCard.vue';
 
 export default {
   components: { VehicleCard },
