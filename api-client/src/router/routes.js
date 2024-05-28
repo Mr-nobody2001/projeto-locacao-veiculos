@@ -1,14 +1,16 @@
-import site from "@/router/site";
-import auth from "./auth";
-import cadastroInformacoesVeiculo from "./cadastro-informacoes-veiculo";
-import listaInformacoesVeiculo from "./lista-informacoes-veiculo";
+import site from '@/router/site';
+import auth from './auth';
+import cadastroInformacoesVeiculo from './cadastro-informacoes-veiculo';
+import listaInformacoesVeiculo from './lista-informacoes-veiculo';
+import cadastroVeiculo from './cadastro-veiculo';
 
-let routes = []
+let routes = [];
 routes = routes.concat(
-    site,
-    auth,
-    cadastroInformacoesVeiculo,
-    listaInformacoesVeiculo
+  site,
+  auth,
+  cadastroInformacoesVeiculo,
+  listaInformacoesVeiculo,
+  cadastroVeiculo
 );
 
 // routes.push({
