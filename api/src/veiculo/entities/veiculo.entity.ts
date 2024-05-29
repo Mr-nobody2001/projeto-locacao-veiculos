@@ -1,8 +1,8 @@
 import { CreationOptional, InferAttributes, InferCreationAttributes, NonAttribute } from "sequelize";
 import { Column, Table, Model, PrimaryKey, AutoIncrement, BelongsTo } from "sequelize-typescript";
-import { InformacaoVeiculo } from "./informacao-veiculo.entity";
-import { Cor } from "./cor.entity";
-import { Categoria } from "./categoria.entity";
+import { InformacoesVeiculo } from "src/informacoes-veiculo/entities/informacoes-veiculo.entity";
+import { Cor } from "../../cor/entities/cor.entity";
+import { Categoria } from "../../categoria/entities/categoria.entity";
 
 export enum VeiculoDisponibilidade {
     manutencao = 'manutencao',
@@ -41,8 +41,8 @@ export class Veiculo extends Model<InferAttributes<Veiculo>, InferCreationAttrib
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
 
-    @BelongsTo(() => InformacaoVeiculo, 'informacoesVeiculoId')
-    declare informacaoVeiculo?: NonAttribute<InformacaoVeiculo>;
+    @BelongsTo(() => InformacoesVeiculo, 'informacoesVeiculoId')
+    declare informacaoVeiculo?: NonAttribute<InformacoesVeiculo>;
 
     @BelongsTo(() => Cor, 'corId')
     declare cor?: NonAttribute<Cor>;
