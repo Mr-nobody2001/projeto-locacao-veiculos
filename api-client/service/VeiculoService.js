@@ -1,8 +1,8 @@
 import APIService from './APIService';
 
 export default {
-  cadastrarVeiculo(informacaoVeiculo) {
-    return APIService.apiCall().post(`veiculo`, informacaoVeiculo);
+  cadastrarVeiculo(dadosVeiculo) {
+    return APIService.apiCall().post(`veiculo`, dadosVeiculo);
   },
   buscarInformacaoVeiculos() {
     return APIService.apiCall().get(`veiculo`);
@@ -11,10 +11,10 @@ export default {
     return APIService.apiCall().get(`veiculo/${id}`);
   },
 
-  atualizarVeiculo(id, informacaoVeiculo) {
+  atualizarVeiculo(id, dadosVeiculo) {
     return APIService.apiCall().patch(
       `veiculo/${id}`,
-      informacaoVeiculo
+      dadosVeiculo
     );
   }
 };

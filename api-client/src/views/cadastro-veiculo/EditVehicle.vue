@@ -63,40 +63,15 @@
             :rules="[rules.required]"
             variant="outlined"
           />
-          <v-menu
-            ref="menu"
-            v-model="menu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="veiculo.ultimaManutencao"
-                label="Última Manutenção"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-                variant="outlined"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="veiculo.ultimaManutencao"
-              no-title
-              scrollable
-            >
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="menu = false">Cancelar</v-btn>
-              <v-btn
-                text
-                color="primary"
-                @click="$refs.menu.save(veiculo.ultimaManutencao)"
-                >OK</v-btn
-              >
-            </v-date-picker>
-          </v-menu>
+          <v-text-field
+            v-model="formattedDate"
+            label="Última Manutenção"
+            prepend-icon="mdi-calendar"
+            :rules="dateRules"
+            @input="onDateInput"
+            variant="outlined"
+            mask="##/##/####"
+          ></v-text-field>
         </v-col>
         <v-col cols="12" class="d-flex justify-center mb-10 mt-5">
           <v-btn
@@ -104,7 +79,7 @@
             type="submit"
             color="primary"
             density="comfortable"
-            @click="saveVeiculo"
+            @click="cadastrarVeiculo"
             :disabled="!isValid"
             :loading="loading"
           >
@@ -119,7 +94,9 @@
 <script>
 import FipeService from '../../../service/FipeService';
 import InformacoesVeiculoService from '../../../service/InformacoesVeiculoService';
+import CorService from '../../../service/CorService';
 import CategoriaService from '../../../service/CategoriaService';
+import VeiculoService from '../../../service/VeiculoService';
 
 export default {
   data: () => ({
@@ -136,6 +113,24 @@ export default {
     cores: [],
     categorias: [],
     disponibilidades: ['manutencao', 'disponivel', 'indisponivel'],
+    formattedDate: '',
+    dateRules: [
+      v => !!v || 'Data é obrigatória',
+      v =>
+        /^\d{0,2}\/\d{0,2}\/\d{0,4}$/.test(v) ||
+        'Formato inválido (dd/mm/aaaa)',
+      v => {
+        if (!v) return true;
+        const [day, month, year] = v.split('/');
+        if (!day || !month || !year) return false;
+        const selectedDate = new Date(`${year}-${month}-${day}`);
+        const currentDate = new Date();
+        return (
+          selectedDate <= currentDate ||
+          'Data não pode ser posterior à data atual'
+        );
+      }
+    ],
     rules: {
       required: value => !!value || 'Obrigatório.',
       numeric: value =>
@@ -145,9 +140,7 @@ export default {
         /^[A-Z]{3}[0-9]{4}$/.test(value) ||
         'Placa inválida. Formato correto: ABC1234 ou ABC1D23'
     },
-    menu: false,
-    loading: false,
-    isUpdate: false
+    loading: false
   }),
 
   computed: {
@@ -166,6 +159,7 @@ export default {
   created() {
     this.buscarInformacaoVeiculos();
     this.buscarCategorias();
+    this.buscarCores();
   },
 
   methods: {
@@ -206,7 +200,21 @@ export default {
       }
     },
 
-    async buscarCores() {},
+    async buscarCores() {
+      try {
+        const response = await CorService.buscarCores();
+        const coresData = response.data;
+        for (let i = 0; i < coresData.length; i++) {
+          const cor = coresData[i];
+          this.cores.push({
+            nome: cor.nome,
+            id: cor.id
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao buscar cores de veículos:', error);
+      }
+    },
 
     async buscarCategorias() {
       try {
@@ -224,12 +232,25 @@ export default {
       }
     },
 
-    cadastrarVeiculo() {
-      this.loading = true;
-
-      // Lógica para salvar ou atualizar o veículo
-
-      this.loading = false;
+    onDateInput() {
+      // Formatar a entrada da data
+      let value = this.formattedDate.replace(/\D/g, '');
+      if (value.length > 8) value = value.slice(0, 8); // Limitar o tamanho da entrada
+      const day = value.slice(0, 2);
+      const month = value.slice(2, 4);
+      const year = value.slice(4, 8);
+      this.formattedDate =
+        day + (month ? '/' + month : '') + (year ? '/' + year : '');
+    },
+    async cadastrarVeiculo() {
+      try {
+        this.loading = true;
+        const dadosVeiculo = this.veiculo;
+        await VeiculoService.cadastrarVeiculo(dadosVeiculo);
+        this.loading = false;
+      } catch (error) {
+        console.error('Erro ao cadastrar veículo:', error);
+      }
     }
   }
 };
