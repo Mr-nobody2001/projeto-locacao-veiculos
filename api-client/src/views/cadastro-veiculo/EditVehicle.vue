@@ -119,7 +119,7 @@
 <script>
 import FipeService from '../../../service/FipeService';
 import InformacoesVeiculoService from '../../../service/InformacoesVeiculoService';
-import VeiculoService from '../../../service/InformacoesVeiculoService';
+import CategoriaService from '../../../service/CategoriaService';
 
 export default {
   data: () => ({
@@ -165,6 +165,7 @@ export default {
 
   created() {
     this.buscarInformacaoVeiculos();
+    this.buscarCategorias();
   },
 
   methods: {
@@ -197,7 +198,7 @@ export default {
 
           this.informacoesVeiculos.push({
             nome: detalhesVeiculo.Modelo,
-            id: veiculo.id 
+            id: veiculo.id
           });
         }
       } catch (error) {
@@ -205,24 +206,25 @@ export default {
       }
     },
 
-    async buscarVeiculos() {
+    async buscarCores() {},
+
+    async buscarCategorias() {
       try {
-        const response = await VeiculoService.buscarVeiculos();
-        const veiculosData = response.data;
-
-        for (let i = 0; i < veiculosData.length; i++) {
-          const veiculo = veiculosData[i];
-          this.cores.push({
-            nome: veiculosData.Modelo,
-            id: veiculo.id // Use o id do veículo retornado pelo serviço
+        const response = await CategoriaService.buscarCategorias();
+        const categoriasData = response.data;
+        for (let i = 0; i < categoriasData.length; i++) {
+          const categoria = categoriasData[i];
+          this.categorias.push({
+            nome: categoria.nome,
+            id: categoria.id
           });
         }
       } catch (error) {
-        console.error('Erro ao buscar informações dos veículos:', error);
+        console.error('Erro ao buscar categorias de veículos:', error);
       }
     },
 
-    saveVeiculo() {
+    cadastrarVeiculo() {
       this.loading = true;
 
       // Lógica para salvar ou atualizar o veículo

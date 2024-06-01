@@ -1,7 +1,8 @@
 import { CreationOptional, InferAttributes, InferCreationAttributes } from "sequelize";
 import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
-@Table
+
+@Table({tableName:'Categorias'})
 export class Categoria extends Model<InferAttributes<Categoria>, InferCreationAttributes<Categoria>> {
     @PrimaryKey
     @AutoIncrement

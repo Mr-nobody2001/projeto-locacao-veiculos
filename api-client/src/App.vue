@@ -14,6 +14,6 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style scoped>
   @import "@/assets/scss/global.scss";
 </style>

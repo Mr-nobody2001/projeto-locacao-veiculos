@@ -262,7 +262,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style scoped>
 .btn {
     background-color: #5D67D6;
 }

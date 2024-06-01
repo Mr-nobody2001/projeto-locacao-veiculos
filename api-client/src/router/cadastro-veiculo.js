@@ -1,6 +1,6 @@
 export default [
     {
-        path: '/create',
+        path: '/cadastrar-veiculo',
         component: () => import('@/views/cadastro-veiculo/EditVehicle.vue'),
         // children: [
         //     {

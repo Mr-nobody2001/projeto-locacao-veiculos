@@ -19,7 +19,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .flex-column {
     flex-direction: column;
 }

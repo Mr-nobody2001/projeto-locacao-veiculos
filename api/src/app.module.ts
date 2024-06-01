@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import {JwtAuthGuard} from "./auth/guards/jwt-auth.guard";
 import {APP_GUARD} from "@nestjs/core";
 import { InformacoesVeiculoModule } from './informacoes-veiculo/informacoes-veiculo.module';
+import { CategoriaModule } from './categoria/categoria.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { InformacoesVeiculoModule } from './informacoes-veiculo/informacoes-veic
         }),
         AuthModule,
         InformacoesVeiculoModule,
+        CategoriaModule,
     ],
 
     controllers: [AppController],

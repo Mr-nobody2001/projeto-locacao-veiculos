@@ -39,7 +39,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .v-main {
     height: 100vh; 
     overflow-y: auto;
