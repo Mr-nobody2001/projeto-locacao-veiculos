@@ -50,7 +50,7 @@
           <v-text-field
             class="mb-10"
             label="Quilometragem"
-            v-model="veiculo.quilometragem"
+            v-model="quilometragemFormatada"
             @input="formatarQuilometragem"
             :rules="[rules.required, rules.numeric]"
             variant="outlined"
@@ -64,11 +64,11 @@
             variant="outlined"
           />
           <v-text-field
-            v-model="formattedDate"
+            v-model="dataFormatada"
             label="Última Manutenção"
             prepend-icon="mdi-calendar"
             :rules="dateRules"
-            @input="onDateInput"
+            @input="formatarData"
             variant="outlined"
             mask="##/##/####"
           ></v-text-field>
@@ -101,19 +101,20 @@ import VeiculoService from '../../../service/VeiculoService';
 export default {
   data: () => ({
     veiculo: {
-      placa: '',
       informacoesVeiculosId: null,
+      placa: '',
       corId: null,
       categoriaId: null,
-      quilometragem: '',
+      quilometragem: null,
       disponibilidade: 'disponivel',
       ultimaManutencao: null
     },
     informacoesVeiculos: [],
     cores: [],
     categorias: [],
+    quilometragemFormatada: '',
     disponibilidades: ['manutencao', 'disponivel', 'indisponivel'],
-    formattedDate: '',
+    dataFormatada: '',
     dateRules: [
       v => !!v || 'Data é obrigatória',
       v =>
@@ -158,25 +159,11 @@ export default {
 
   created() {
     this.buscarInformacaoVeiculos();
-    this.buscarCategorias();
     this.buscarCores();
+    this.buscarCategorias();
   },
 
   methods: {
-    formatarPlaca() {
-      this.veiculo.placa = this.veiculo.placa
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, '')
-        .slice(0, 7);
-    },
-    formatarQuilometragem() {
-      let quilometragem = this.veiculo.quilometragem.replace(/\D/g, '');
-      if (quilometragem.length > 3) {
-        quilometragem = quilometragem.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      }
-      this.veiculo.quilometragem = quilometragem;
-    },
-
     async buscarInformacaoVeiculos() {
       try {
         const response =
@@ -217,6 +204,7 @@ export default {
     },
 
     async buscarCategorias() {
+      
       try {
         const response = await CategoriaService.buscarCategorias();
         const categoriasData = response.data;
@@ -232,17 +220,8 @@ export default {
       }
     },
 
-    onDateInput() {
-      // Formatar a entrada da data
-      let value = this.formattedDate.replace(/\D/g, '');
-      if (value.length > 8) value = value.slice(0, 8); // Limitar o tamanho da entrada
-      const day = value.slice(0, 2);
-      const month = value.slice(2, 4);
-      const year = value.slice(4, 8);
-      this.formattedDate =
-        day + (month ? '/' + month : '') + (year ? '/' + year : '');
-    },
     async cadastrarVeiculo() {
+      console.log(this.veiculo)
       try {
         this.loading = true;
         const dadosVeiculo = this.veiculo;
@@ -250,7 +229,38 @@ export default {
         this.loading = false;
       } catch (error) {
         console.error('Erro ao cadastrar veículo:', error);
+        this.loading = false;
       }
+    },
+
+    formatarPlaca() {
+      this.veiculo.placa = this.veiculo.placa
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')
+        .slice(0, 7);
+    },
+    formatarQuilometragem() {
+      let quilometragem = this.quilometragemFormatada.replace(/\D/g, '');
+      if (quilometragem.length > 3) {
+        quilometragem = quilometragem.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+      this.quilometragemFormatada = quilometragem;
+      this.veiculo.quilometragem = parseFloat(quilometragem.replace(/\./g, ''));
+    },
+    formatarData() {
+      let value = this.dataFormatada.replace(/\D/g, '');
+      if (value.length > 8) value = value.slice(0, 8); // Limitar o tamanho da entrada
+
+      const day = value.slice(0, 2);
+      const month = value.slice(2, 4);
+      const year = value.slice(4, 8);
+
+      this.dataFormatada =
+        day + (month ? '/' + month : '') + (year ? '/' + year : '');
+
+      // Converter para objeto Date, ajustando a hora para evitar problemas de fuso horário
+      const formattedDate = new Date(`${year}-${month}-${day}T12:00:00`);
+      this.veiculo.ultimaManutencao = formattedDate;
     }
   }
 };
