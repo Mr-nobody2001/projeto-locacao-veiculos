@@ -179,7 +179,7 @@ export default {
 
           this.informacoesVeiculos.push({
             nome: detalhesVeiculo.Modelo,
-            id: veiculo.id
+            id: String(veiculo.id)
           });
         }
       } catch (error) {
@@ -195,7 +195,7 @@ export default {
           const cor = coresData[i];
           this.cores.push({
             nome: cor.nome,
-            id: cor.id
+            id: String(cor.id)
           });
         }
       } catch (error) {
@@ -204,7 +204,6 @@ export default {
     },
 
     async buscarCategorias() {
-      
       try {
         const response = await CategoriaService.buscarCategorias();
         const categoriasData = response.data;
@@ -212,7 +211,7 @@ export default {
           const categoria = categoriasData[i];
           this.categorias.push({
             nome: categoria.nome,
-            id: categoria.id
+            id: String(categoria.id)
           });
         }
       } catch (error) {
@@ -245,7 +244,7 @@ export default {
         quilometragem = quilometragem.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
       }
       this.quilometragemFormatada = quilometragem;
-      this.veiculo.quilometragem = parseFloat(quilometragem.replace(/\./g, ''));
+      this.veiculo.quilometragem = String(quilometragem.replace(/\./g, ''));
     },
     formatarData() {
       let value = this.dataFormatada.replace(/\D/g, '');
@@ -255,12 +254,18 @@ export default {
       const month = value.slice(2, 4);
       const year = value.slice(4, 8);
 
+      // Atualizar o campo de entrada para mostrar dd/mm/aaaa enquanto o usuário digita
       this.dataFormatada =
-        day + (month ? '/' + month : '') + (year ? '/' + year : '');
+        (day ? day : '') +
+        (month ? '/' + month : '') +
+        (year ? '/' + year : '');
 
-      // Converter para objeto Date, ajustando a hora para evitar problemas de fuso horário
-      const formattedDate = new Date(`${year}-${month}-${day}T12:00:00`);
-      this.veiculo.ultimaManutencao = formattedDate;
+      // Formatar a data no formato YYYY-MM-DD para armazenamento
+      if (year.length === 4 && month.length === 2 && day.length === 2) {
+        const formattedDate = `${year}-${month}-${day}`;
+        // Armazenar a data formatada como string no formato aaaa-mm-dd
+        this.veiculo.ultimaManutencao = formattedDate;
+      }
     }
   }
 };
