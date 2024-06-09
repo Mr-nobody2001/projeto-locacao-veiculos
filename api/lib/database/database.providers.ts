@@ -4,6 +4,7 @@ import { InformacoesVeiculo } from '../../src/informacoes-veiculo/entities/infor
 import {Cor} from '../../src/cor/entities/cor.entity'
 import { Categoria } from '../../src/categoria/entities/categoria.entity';
 import * as databaseConfig from './database.config';
+import { Veiculo } from 'src/veiculo/entities/veiculo.entity';
 
 
 export const databaseProviders = [
@@ -11,7 +12,7 @@ export const databaseProviders = [
     provide: 'SEQUELIZE',
     useFactory: async () => {
       const sequelize = new Sequelize(databaseConfig as SequelizeOptions);
-      sequelize.addModels([Cliente, InformacoesVeiculo, Categoria, Cor]);
+      sequelize.addModels([Cliente, InformacoesVeiculo, Categoria, Cor, Veiculo]);
       await sequelize.sync();
       return sequelize;
     },

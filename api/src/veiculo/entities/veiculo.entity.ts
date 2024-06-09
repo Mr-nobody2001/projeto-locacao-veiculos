@@ -11,7 +11,7 @@ export enum VeiculoDisponibilidade {
 }
 
 @Table
-export class Veiculo extends Model<InferAttributes<Veiculo>, InferCreationAttributes<Veiculo>> {
+export class Veiculo extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column({ allowNull: false })

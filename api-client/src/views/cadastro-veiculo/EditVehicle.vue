@@ -23,7 +23,7 @@
             :items="informacoesVeiculos"
             item-title="nome"
             item-value="id"
-            v-model="veiculo.informacoesVeiculosId"
+            v-model="veiculo.informacoesVeiculoId"
             :rules="[rules.required]"
             variant="outlined"
           />
@@ -97,11 +97,13 @@ import InformacoesVeiculoService from '../../../service/InformacoesVeiculoServic
 import CorService from '../../../service/CorService';
 import CategoriaService from '../../../service/CategoriaService';
 import VeiculoService from '../../../service/VeiculoService';
+import { erro, sucesso } from '@/toast/toast';
+import router from '@/router/router';
 
 export default {
   data: () => ({
     veiculo: {
-      informacoesVeiculosId: null,
+      informacoesVeiculoId: null,
       placa: '',
       corId: null,
       categoriaId: null,
@@ -148,7 +150,7 @@ export default {
     isValid() {
       return (
         this.veiculo.placa &&
-        this.veiculo.informacoesVeiculosId &&
+        this.veiculo.informacoesVeiculoId &&
         this.veiculo.corId &&
         this.veiculo.categoriaId &&
         this.veiculo.quilometragem &&
@@ -226,9 +228,11 @@ export default {
         const dadosVeiculo = this.veiculo;
         await VeiculoService.cadastrarVeiculo(dadosVeiculo);
         this.loading = false;
+        sucesso('Veiculo cadastrado');
+        router.push({name: 'ListVeiculos'});
       } catch (error) {
-        console.error('Erro ao cadastrar veículo:', error);
         this.loading = false;
+        erro(error.data.message);
       }
     },
 

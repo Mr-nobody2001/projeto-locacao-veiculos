@@ -1,4 +1,4 @@
-import { IsDefined, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { IsDefined, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { VeiculoDisponibilidade } from "../entities/veiculo.entity";
 
 export class CreateVeiculoDto {
@@ -28,6 +28,6 @@ export class CreateVeiculoDto {
     @IsEnum(VeiculoDisponibilidade)
     disponibilidade: VeiculoDisponibilidade;
 
+    @IsOptional()
     ultimaManutencao: Date;
-
 }
