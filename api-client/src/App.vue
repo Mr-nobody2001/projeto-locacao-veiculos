@@ -14,6 +14,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
   @import "@/assets/scss/global.scss";
+
+  html {
+    overflow: hidden !important;
+  }
 </style>

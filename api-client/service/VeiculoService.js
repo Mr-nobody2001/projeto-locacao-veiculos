@@ -16,5 +16,13 @@ export default {
       `veiculo/${id}`,
       dadosVeiculo
     );
-  }
+  },
+
+  buscarVeiculos() {
+    return APIService.apiCall().get(`veiculo`);
+  },
+
+  deleteVeiculo(id) {
+    return APIService.apiCall().delete(`veiculo/${id}`);
+  },
 };
