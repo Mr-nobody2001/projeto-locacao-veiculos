@@ -12,5 +12,8 @@ export default {
     },
     buscarInformacaoVeiculos(){
         return APIService.apiCall().get(`informacao-veiculo`);
-    }
+    },
+    deleteInformacaoVeiculos(id) {
+        return APIService.apiCall().delete(`informacao-veiculo/${id}`);
+    },
 }

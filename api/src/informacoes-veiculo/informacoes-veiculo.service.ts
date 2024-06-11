@@ -49,7 +49,8 @@ export class InformacoesVeiculoService {
         }, { where: { id } });
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} informacoesVeiculo`;
+    async remove(id: number) {
+        const record = await this.findOne(id);
+        await record.destroy();
     }
 }

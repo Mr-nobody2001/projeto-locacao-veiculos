@@ -8,7 +8,7 @@
         >
           <v-list color="transparent">
             <router-link :to="{ name: '' }" class="no-underline" >
-                <v-list-item prepend-icon="mdi-view-dashboard" title="Perfil"></v-list-item>
+                <v-list-item prepend-icon="mdi-view-dashboard" title="Reserva"></v-list-item>
             </router-link>
             <router-link :to="{ name: 'ListVeiculos' }" class="no-underline" >
                 <v-list-item prepend-icon="mdi-view-dashboard" title="Veiculos"></v-list-item>

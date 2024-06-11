@@ -44,6 +44,7 @@ export default [{
                 },
                 {
                     path: "editar/:id",
+                    name: "EditarInformacao",
                     component: () => import('@/views/admin/informacoes-veiculos/EditItem.vue'),
                 },
             ]

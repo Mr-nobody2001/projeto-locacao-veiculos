@@ -116,9 +116,10 @@ import FipeService from '../../../../service/FipeService';
 import {erro, sucesso} from "@/toast/toast";
 import InformacoesVeiculoService from "../../../../service/InformacoesVeiculoService";
 import { useRoute } from 'vue-router';
+import router from '@/router/router';
 
 export default {
-
+  
   data: () => ({
     id: null,
     loadingMarca: false,
@@ -238,6 +239,7 @@ export default {
           .cadastrarInformacaoVeiculo(dadosVeiculo)
           .then(() => {
             sucesso('Informações do veículo cadastradas com sucesso!');
+            router.push({name: 'ListItem'});
           })
           .catch((err) => {
             console.error('Erro: ', err);
@@ -259,6 +261,7 @@ export default {
           .atualizarInformacaoVeiculo(this.$data.id, dadosVeiculo)
           .then(() => {
             sucesso('Informações do veículo atualizadas com sucesso!');
+            router.push({name: 'ListItem'});
           })
           .catch((err) => {
             console.error('Erro: ', err);
