@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { InformacoesVeiculoModule } from './informacoes-veiculo/informacoes-veiculo.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { CorModule } from './cor/cor.module';
+import { ReservasVeiculosModule } from './reservas-veiculos/reservas-veiculos.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CorModule } from './cor/cor.module';
     InformacoesVeiculoModule,
     CorModule,
     CategoriaModule,
+    ReservasVeiculosModule,
   ],
 
   controllers: [AppController],
