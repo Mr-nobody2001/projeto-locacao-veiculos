@@ -1,11 +1,6 @@
 <template>
   <v-container fluid>
     <v-card class="mx-auto mt-10 mb-10" max-width="80vw">
-      <v-card-item>
-        <div class="d-flex justify-center">
-          <img src="../../../assets/img/logo.jpg" alt="Logo" width="140"/>
-        </div>
-      </v-card-item>
       <v-table>
         <thead>
           <tr>

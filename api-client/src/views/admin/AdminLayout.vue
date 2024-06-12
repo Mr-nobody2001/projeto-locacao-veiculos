@@ -8,21 +8,32 @@
         >
           <v-list color="transparent">
             <router-link :to="{ name: '' }" class="no-underline" >
-                <v-list-item prepend-icon="mdi-view-dashboard" title="Reserva"></v-list-item>
+                <v-list-item prepend-icon="mdi-car-clock" title="Reserva"></v-list-item>
             </router-link>
             <router-link :to="{ name: 'ListVeiculos' }" class="no-underline" >
-                <v-list-item prepend-icon="mdi-view-dashboard" title="Veiculos"></v-list-item>
+                <v-list-item prepend-icon="mdi-car" title="Veiculos"></v-list-item>
             </router-link>
             <router-link :to="{ name: 'ListItem' }" class="no-underline" >
-                <v-list-item prepend-icon="mdi-view-dashboard" title="Informações do Veiculo"></v-list-item>
+                <v-list-item prepend-icon="mdi-car-info" title="Informações do Veiculo"></v-list-item>
             </router-link>
             <router-link :to="{ name: '' }" class="no-underline" >
-                <v-list-item prepend-icon="mdi-view-dashboard" title="Clientes"></v-list-item>
+                <v-list-item prepend-icon="mdi-account" title="Clientes"></v-list-item>
             </router-link>
           </v-list>
         </v-navigation-drawer>
         <v-main>
-            <router-view />
+
+          <v-app-bar :elevation="2">
+            <template v-slot:prepend>
+              <v-app-bar-nav-icon></v-app-bar-nav-icon>
+            </template>
+            <v-app-bar-title>
+              <img src="../../assets/img/logo.jpg" alt="Logo" width="50"/>
+            </v-app-bar-title>
+          </v-app-bar>
+
+          <router-view />
+
         </v-main>
       </v-layout>
     </v-card>
