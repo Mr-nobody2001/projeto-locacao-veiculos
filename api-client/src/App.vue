@@ -16,8 +16,4 @@ export default defineComponent({
 
 <style>
   @import "@/assets/scss/global.scss";
-
-  html {
-    overflow: hidden !important;
-  }
 </style>
