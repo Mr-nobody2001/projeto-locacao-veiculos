@@ -99,3 +99,13 @@ export const isValidCardNumber = (cardNumber) => {
     }
     return false;
   }
+
+export const formatarCPF = (cpf) => {
+// Implementação para formatar CPF
+return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+};
+
+export const formatarTelefone = (telefone) => {
+// Implementação para formatar telefone
+return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+}

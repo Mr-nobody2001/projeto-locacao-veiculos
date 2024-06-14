@@ -49,5 +49,25 @@ export default [{
                 },
             ]
         },
+        {
+            path: "clientes",
+            children: [
+                {
+                    path: "",
+                    name: "ListClientes",
+                    component: () => import('@/views/admin/clientes/ListClientes.vue'),
+                },
+                {
+                    path: "cadastrar",
+                    name: "CadastrarClientes",
+                    component: () => import('@/views/admin/clientes/EditClientes.vue'),
+                },
+                {
+                    path: "editar/:id",
+                    name: "EditClientes",
+                    component: () => import('@/views/admin/clientes/EditClientes.vue'),
+                },
+            ]
+        },
     ]
 }];

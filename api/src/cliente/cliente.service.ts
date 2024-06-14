@@ -8,6 +8,7 @@ import {CreateClienteDto} from './dto/create-cliente.dto';
 import {UpdateClienteDto} from './dto/update-cliente.dto';
 import {Cliente} from './entities/cliente.entity';
 import * as bcrypt from 'bcryptjs';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class ClienteService {
@@ -70,7 +71,23 @@ export class ClienteService {
     }
 
     async update(id: number, updateClienteDto: UpdateClienteDto) {
+        updateClienteDto.cpf = updateClienteDto.cpf.replace(/\D/g, '');
+        updateClienteDto.telefone = updateClienteDto.telefone.replace(/\D/g, '');
+
         let cliente = await this.findOne(id);
+        if (!cliente) {
+            throw new BadRequestException('Cliente não encontrado');
+        }
+
+        const emailExiste = await this.emailExits(updateClienteDto.email, cliente.id);
+        if (emailExiste) {
+            throw new BadRequestException('Esse email já está sendo usado');
+        }
+
+        const cpfExiste = await this.cpfExits(updateClienteDto.cpf, cliente.id);
+        if (cpfExiste) {
+            throw new BadRequestException('Esse cpf já está sendo usado');
+        }
 
         const senha = updateClienteDto.senha ? await this.encriptarSenha(updateClienteDto.senha) : cliente.senha;
 
@@ -95,21 +112,38 @@ export class ClienteService {
         await cliente.destroy();
     }
 
-    async emailExits(email: string) {
+    async emailExits(email: string, id?: number) {
+        const where: any = {
+            email,
+        };
+    
+        if (id) {
+            where.id = {
+                [Op.ne]: id,
+            };
+        }
+    
         const count = await this.clienteRepository.count({
-            where: {
-                email,
-            },
+            where,
         });
+    
         return count > 0;
     }
 
-    async cpfExits(cpf: string) {
+    async cpfExits(cpf: string, id?: number) {
+        const where: any = {
+            cpf,
+        };
+
+        if (id) {
+            where.id = {
+                [Op.ne]: id,
+            };
+        }
         const count = await this.clienteRepository.count({
-            where: {
-                cpf,
-            },
+            where
         });
+
         return count > 0;
     }
 

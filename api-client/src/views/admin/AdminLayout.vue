@@ -16,7 +16,7 @@
             <router-link :to="{ name: 'ListItem' }" class="no-underline" >
                 <v-list-item prepend-icon="mdi-car-info" title="Informações do Veiculo"></v-list-item>
             </router-link>
-            <router-link :to="{ name: '' }" class="no-underline" >
+            <router-link :to="{ name: 'ListClientes' }" class="no-underline" >
                 <v-list-item prepend-icon="mdi-account" title="Clientes"></v-list-item>
             </router-link>
           </v-list>
