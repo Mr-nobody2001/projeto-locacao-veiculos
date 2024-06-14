@@ -1,5 +1,15 @@
 <template>
   <v-container fluid>
+    <header>
+      <div class="header-content d-flex align-center">
+        <router-link :to="{ name: 'LoginForm' }" class="ms-auto">
+          <v-btn variant="text" class="btn-back" color="primary">
+            Avançar
+            <v-icon icon="mdi-chevron-right" start></v-icon>
+          </v-btn>
+        </router-link>
+      </div>
+    </header>
     <v-card class="mx-auto mt-10 mb-10" max-width="80vw">
       <v-card-item>
         <div class="d-flex justify-center">
@@ -64,6 +74,9 @@
 
 <script>
 import { isValidCardNumber } from '@/helpers';
+import { erro, sucesso } from '@/toast/toast';
+import InformacoesPagamentoService from '../../../service/InformacoesPagamentoService';
+
 export default {
   data() {
     return {
@@ -79,6 +92,7 @@ export default {
           } else if (!isValidCardNumber(value)) {
             return 'Número de cartão inválido';
           }
+          return true; // Adicionando o retorno true
         }
       ],
       cardholderNameRule: [
@@ -86,6 +100,7 @@ export default {
           if (value === '') {
             return 'O nome é obrigatório';
           }
+          return true; // Adicionando o retorno true
         }
       ],
       cardCvcRule: [
@@ -93,6 +108,7 @@ export default {
           if (value.length < 3) {
             return 'Código inválido';
           }
+          return true; // Adicionando o retorno true
         }
       ],
       cardExpiryRule: [
@@ -112,7 +128,7 @@ export default {
               return 'Data de expiração deve ser posterior à data atual';
             }
 
-            return true;
+            return true; // Adicionando o retorno true
           }
         }
       ]
@@ -140,14 +156,29 @@ export default {
     submitPayment() {
       this.loading = true;
       const data = {
-        cardNumber: this.cardNumber,
-        cardholderName: this.cardholderName,
-        cardExpiry: this.cardExpiry,
-        cardCvc: this.cardCvc
+        cliente_id: this.$route.params.clienteId, // Adicionando o ID do cliente
+        numero_cartao: this.cardNumber,
+        nome_titular: this.cardholderName,
+        validade: this.cardExpiry,
+        codigo_seguranca: this.cardCvc
       };
 
-      //Enviar dados para o backend
       console.log(data);
+
+      InformacoesPagamentoService.cadastrarPagamento(data)
+        .then(() => {
+          sucesso('Método de pagamento cadastrado com sucesso!');
+          this.$router.push({ name: 'LoginForm' });
+        })
+        .catch(e => {
+          const errorMessage =
+            e?.response?.data?.message ||
+            'Erro método de pagamento não cadastrado';
+          erro(errorMessage);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     formatCardNumber() {
       // Remove caracteres não numéricos do número do cartão

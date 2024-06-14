@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit.prevent v-model="isFormValid">
+  <v-form @submit.prevent="cadastrarCliente" v-model="isFormValid">
     <v-row>
       <v-col cols="12" sm="6">
         <v-text-field 
@@ -53,8 +53,8 @@
       </v-col>
 
       <v-col class="d-flex justify-center mt-5" cols="12">
-        <v-btn type="submit" color="primary" :loading="loading" @click="cadastrarCliente()">
-          {{  textButton  }}
+        <v-btn type="submit" color="primary" :loading="loading">
+          {{ textButton }}
         </v-btn>
       </v-col>
     </v-row>
@@ -156,9 +156,9 @@ export default {
       senhaRule: [
         value => {
           if (value === "") {
-            return 'Senha é obrigatório'
+            return 'Senha é obrigatória'
           }
-          if (this.$data.confSenha != '' && value != this.$data.confSenha) {
+          if (this.confSenha !== '' && value !== this.confSenha) {
             return 'Senhas diferentes'
           }
           return true;
@@ -167,9 +167,9 @@ export default {
       confSenhaRule: [
         value => {
           if (value === "") {
-            return 'Confirmação de senha é obrigatório'
+            return 'Confirmação de senha é obrigatória'
           }
-          if (this.$data.senha != '' && value != this.$data.senha) {
+          if (this.senha !== '' && value !== this.senha) {
             return 'Senhas diferentes'
           }
           return true;
@@ -193,30 +193,25 @@ export default {
         endereco: this.endereco,
       };
 
-      if (this.clienteId) {
-        ClienteService
-          .atualizarCliente(this.clienteId, data)
-          .then(() => this.$emit('sent'))
-          .catch((e) => {
-            erro(e.data.message)
-          })
-          .finally(() => this.loading = false)
-      } else {
-        ClienteService
-          .cadastrarCliente(data)
-          .then(() => this.$emit('sent'))
-          .catch((e) => {
-            erro(e.data.message)
-          })
-          .finally(() => this.loading = false)
-      }      
-    },
+      ClienteService
+        .cadastrarCliente(data)
+        .then(response => {
+          const clienteId = response.data.id; 
+          this.$router.push({ name: 'PaymentRegistration', params: { clienteId } });
+        })
+        .catch(e => {
+          erro(e.data.message);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
   },
   created() {
-    if (this.$props.clienteId) {
+    if (this.clienteId) {
       this.textButton = "Atualizar";
-      ClienteService.buscarCliente(this.$props.clienteId)
-        .then((res) => {
+      ClienteService.buscarCliente(this.clienteId)
+        .then(res => {
           this.nomeCompleto = res.data.nome;
           this.cpf = res.data.cpf;
           this.dataDeNasc = res.data.data_nascimento;

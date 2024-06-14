@@ -11,6 +11,7 @@ import { InformacoesVeiculoModule } from './informacoes-veiculo/informacoes-veic
 import { CategoriaModule } from './categoria/categoria.module';
 import { CorModule } from './cor/cor.module';
 import { ReservasVeiculosModule } from './reservas-veiculos/reservas-veiculos.module';
+import { InformacoesPagamentoModule } from './informacoes-pagamento/informacoes-pagamento.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReservasVeiculosModule } from './reservas-veiculos/reservas-veiculos.mo
     CorModule,
     CategoriaModule,
     ReservasVeiculosModule,
+    InformacoesPagamentoModule
   ],
 
   controllers: [AppController],
