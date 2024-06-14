@@ -5,6 +5,7 @@ import { ReservaCheckInDto } from './dto/reserva-check-in.dto';
 import { Cliente } from 'src/cliente/entities/cliente.entity';
 import { InformacoesVeiculo } from 'src/informacoes-veiculo/entities/informacoes-veiculo.entity';
 import { Veiculo, VeiculoDisponibilidade } from 'src/veiculo/entities/veiculo.entity';
+import { Cor } from 'src/cor/entities/cor.entity';
 
 @Injectable()
 export class ReservasVeiculosService {
@@ -42,12 +43,49 @@ export class ReservasVeiculosService {
         });
     }
 
-    findAll() {
-        return this.reservasVeiculosRepository.findAll();
+    async findAll() {
+        return await this.reservasVeiculosRepository.findAll({
+            include: [
+                {
+                    model: Veiculo,
+                    as: 'veiculo'
+                },
+                {
+                    model: Cliente,
+                    as: 'cliente'
+                },
+                {
+                    model: InformacoesVeiculo,
+                    as: 'informacoesVeiculo'
+                }
+            ]
+        });
     }
 
-    findOne(id: number) {
-        return this.reservasVeiculosRepository.findByPk(id);
+    async findOne(id: number) {
+        return await this.reservasVeiculosRepository.findOne({
+            where: { id },
+            include: [
+                {
+                    model: Veiculo,
+                    as: 'veiculo',
+                    include: [
+                        {
+                            model: Cor,
+                            as: 'cor'
+                        }
+                    ]
+                },
+                {
+                    model: Cliente,
+                    as: 'cliente'
+                },
+                {
+                    model: InformacoesVeiculo,
+                    as: 'informacoesVeiculo'
+                }
+            ]
+        });
     }
 
     async checkIn(id: number, reservaCheckInDto: ReservaCheckInDto) {

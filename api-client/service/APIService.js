@@ -18,6 +18,10 @@ export default {
             'Content-Type': 'application/json'
         }
 
+        if (baseURL === 'https://parallelum.com.br') {
+            headers['X-Subscription-Token'] = process.env.VUE_APP_FIPE_API_TOKEN;
+        }
+
         let call = axios.create({
             baseURL: baseURL || process.env.VUE_APP_API_URL,
             headers: baseURL ? headers : getCustomHeaders(headers),

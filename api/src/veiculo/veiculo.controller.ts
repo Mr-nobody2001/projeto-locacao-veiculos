@@ -17,6 +17,11 @@ export class VeiculoController {
     return this.veiculoService.findAll();
   }
 
+  @Get('informacoes-veiculos/:id')
+  findByInformacoesVeiculoId(@Param('id') id: number) {
+    return this.veiculoService.findByInformacoesVeiculoId(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.veiculoService.findOne(+id);

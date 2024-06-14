@@ -53,6 +53,26 @@ export class VeiculoService {
     });
   }
 
+  async findByInformacoesVeiculoId(informacoesVeiculoId: number) {
+    return await this.veiculoRepository.findAll({
+      include: [
+        {
+          model: Categoria,
+          as: 'categoria'
+        },
+        {
+          model: Cor,
+          as: 'cor'
+        },
+        {
+          model: InformacoesVeiculo,
+          as: 'informacoesVeiculo'
+        }
+      ],
+      where: { informacoesVeiculoId }
+    });
+  }
+
   async findOne(id: number) {
     const record = await this.veiculoRepository.findByPk(id);
 

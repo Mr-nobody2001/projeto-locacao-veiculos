@@ -7,8 +7,8 @@
           permanent
         >
           <v-list color="transparent">
-            <router-link :to="{ name: '' }" class="no-underline" >
-                <v-list-item prepend-icon="mdi-car-clock" title="Reserva"></v-list-item>
+            <router-link :to="{ name: 'ListReservas' }" class="no-underline" >
+                <v-list-item prepend-icon="mdi-car-clock" title="Reservas"></v-list-item>
             </router-link>
             <router-link :to="{ name: 'ListVeiculos' }" class="no-underline" >
                 <v-list-item prepend-icon="mdi-car" title="Veiculos"></v-list-item>

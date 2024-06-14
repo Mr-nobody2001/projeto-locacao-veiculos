@@ -102,10 +102,32 @@ export const isValidCardNumber = (cardNumber) => {
 
 export const formatarCPF = (cpf) => {
 // Implementação para formatar CPF
-return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+return String(cpf).replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
 };
 
 export const formatarTelefone = (telefone) => {
 // Implementação para formatar telefone
-return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+return String(telefone).replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+}
+
+export const formatDate = (dateString) => {
+    let date = new Date(dateString);
+    if (String(dateString).length <= 10) {
+        date = new Date(date.getTime() + 3 * 60 * 60 * 1000);
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    let formattedDate = `${day}/${month}/${year}`;
+
+    if (String(dateString).length > 10) {
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        formattedDate = `${formattedDate} ${hours}:${minutes}:${seconds}`;
+    }
+    
+    return formattedDate;
 }

@@ -1,11 +1,6 @@
 <template>
   <v-container fluid>
     <v-card class="mx-auto mt-10 mb-10" max-width="80vw">
-      <v-card-item>
-        <div class="d-flex justify-center">
-          <img src="../../assets/img/logo.jpg" alt="Logo" width="140" />
-        </div>
-      </v-card-item>
       <v-row class="d-flex justify-center mt-10">
         <v-col cols="10">
           <v-text-field
@@ -92,11 +87,11 @@
 </template>
 
 <script>
-import FipeService from '../../../service/FipeService';
-import InformacoesVeiculoService from '../../../service/InformacoesVeiculoService';
-import CorService from '../../../service/CorService';
-import CategoriaService from '../../../service/CategoriaService';
-import VeiculoService from '../../../service/VeiculoService';
+import FipeService from '../../../../service/FipeService';
+import InformacoesVeiculoService from '../../../../service/InformacoesVeiculoService';
+import CorService from '../../../../service/CorService';
+import CategoriaService from '../../../../service/CategoriaService';
+import VeiculoService from '../../../../service/VeiculoService';
 import { erro, sucesso } from '@/toast/toast';
 import router from '@/router/router';
 

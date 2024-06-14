@@ -20,12 +20,12 @@ export default [{
                 {
                     path: "cadastrar",
                     name: "CadastrarVeiculo",
-                    component: () => import("@/views/cadastro-veiculo/EditVehicle.vue"),
+                    component: () => import("@/views/admin/veiculos/EditVehicle.vue"),
                 },
                 {
                     path: "editar/:id",
                     name: "EditarVeiculo",
-                    component: () => import("@/views/cadastro-veiculo/EditVehicle.vue"),
+                    component: () => import("@/views/admin/veiculos/EditVehicle.vue"),
                 }
             ]
         },
@@ -69,5 +69,30 @@ export default [{
                 },
             ]
         },
+        {
+            path: "reservas",
+            children: [
+                {
+                    path: "",
+                    name: "ListReservas",
+                    component: () => import('@/views/admin/reserva-veiculo/ListReservas.vue'),
+                },
+                {
+                    path: "detalhes/:id",
+                    name: "DetalhesReserva",
+                    component: () => import('@/views/admin/reserva-veiculo/ReservaDetalhes.vue'),
+                },
+                {
+                    path: "cadastrar",
+                    name: "CadastrarReserva",
+                    component: () => import('@/views/admin/reserva-veiculo/CadastrarReserva.vue'),
+                },
+                {
+                    path: "checkin/:id",
+                    name: "CheckInReserva",
+                    component: () => import('@/views/admin/reserva-veiculo/CheckInReserva.vue'),
+                },
+            ]
+        }
     ]
 }];

@@ -12,6 +12,16 @@ export class ReservasVeiculosController {
     return this.reservasVeiculosService.create(createReservasVeiculosDto);
   }
 
+  @Get()
+  findAll() {
+    return this.reservasVeiculosService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.reservasVeiculosService.findOne(id);
+  }
+
   @Patch("checkin/:id")
   checkIn(@Param('id') id: number, @Body() reservaCheckInDto: ReservaCheckInDto) {
     return this.reservasVeiculosService.checkIn(id, reservaCheckInDto);

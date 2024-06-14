@@ -6,13 +6,13 @@ export default [{
         {
             path: "",
             redirect: {
-                name: "CategoryPage"
+                name: "HomePage"
             }
         },
         {
-            path: "categoria",
-            name: "CategoryPage",
-            component: () => import('@/views/site/CategoryPage.vue'),
-        }
+            path: "home",
+            name: "HomePage",
+            component: () => import('@/views/site/HomePage.vue'),
+        },
     ]
 }]
